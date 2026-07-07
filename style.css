@@ -47,6 +47,8 @@
   --nav-h:64px;
 }
 
+@view-transition{navigation:auto;}
+
 html{scroll-behavior:smooth;background:var(--bg);}
 [id]{scroll-margin-top:calc(var(--nav-h) + 12px);}
 
@@ -56,11 +58,7 @@ body{
   color:var(--text);
   line-height:1.6;
   overflow-x:hidden;
-  opacity:0;
-  transition:opacity .35s ease;
 }
-body.page-ready{opacity:1;}
-body.page-exit{opacity:0;}
 
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}

@@ -1,8 +1,10 @@
 /* =========================================================
    JobReady SG — shared script
-   Handles: nav active state, mobile menu, page transitions,
+   Handles: nav active state, mobile menu,
    scroll-triggered fade-ins, demo conversation animation,
    architecture diagram simulation, and the Botpress chat helper.
+   Cross-page transitions are handled natively by the browser's
+   View Transitions API (see @view-transition in style.css).
    ========================================================= */
 
 // Mark JS as available immediately so CSS only hides reveal-target
@@ -10,9 +12,6 @@
 document.documentElement.classList.add('js-ready');
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  /* ---------- fade page in on load ---------- */
-  requestAnimationFrame(() => document.body.classList.add('page-ready'));
 
   /* ---------- highlight the active nav link ---------- */
   const page = document.body.dataset.page;
@@ -27,18 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     toggle.addEventListener('click', () => panel.classList.toggle('open'));
     panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => panel.classList.remove('open')));
   }
-
-  /* ---------- smooth fade-out before navigating to another page on this site ---------- */
-  document.querySelectorAll('a[data-transition]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      if (!href || href.startsWith('#') || link.target === '_blank') return;
-      e.preventDefault();
-      document.body.classList.remove('page-ready');
-      document.body.classList.add('page-exit');
-      setTimeout(() => { window.location.href = href; }, 180);
-    });
-  });
 
   /* ---------- scroll-triggered fade-in for cards and blocks ---------- */
   const revealSelectors = [
