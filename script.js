@@ -2,9 +2,10 @@
    JobReady SG — shared script
    Handles: nav active state, mobile menu,
    scroll-triggered fade-ins, demo conversation animation,
-   architecture diagram simulation, and the Botpress chat helper.
+   and the architecture diagram simulation.
    Cross-page transitions are handled natively by the browser's
    View Transitions API (see @view-transition in style.css).
+   The Botpress chat on chat.html is a plain iframe embed, no JS needed.
    ========================================================= */
 
 // Mark JS as available immediately so CSS only hides reveal-target
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- scroll-triggered fade-in for cards and blocks ---------- */
   const revealSelectors = [
     '.agent-card', '.jstep', '.team-card', '.tech-badge', '.faq-item',
-    '.video-shell', '.arch-shell', '.chat-launch', '.convo-shell', '.block-title'
+    '.video-shell', '.arch-shell', '.chat-frame', '.convo-shell', '.block-title'
   ].join(',');
   const revealEls = document.querySelectorAll(revealSelectors);
   if (revealEls.length) {
@@ -105,40 +106,3 @@ function runArchDemo() {
     }, idx * 700 + 175);
   });
 }
-
-/* =========================================================
-   CHAT PAGE: open / auto-open the existing Botpress webchat
-   These functions only do anything on pages where the Botpress
-   embed scripts are actually present (chat.html).
-   ========================================================= */
-function openChat() {
-  if (window.botpressWebChat) {
-    window.botpressWebChat.sendEvent({ type: 'show' });
-  } else {
-    const note = document.getElementById('fallbackNote');
-    if (note) {
-      note.classList.add('show');
-      setTimeout(() => note.classList.remove('show'), 3500);
-    }
-  }
-}
-
-// Auto-open the chat panel as soon as Botpress finishes loading on chat.html
-window.addEventListener('load', () => {
-  const launch = document.getElementById('chatLaunch');
-  if (!launch) return; // not on the chat page
-  const tryOpen = setInterval(() => {
-    if (window.botpressWebChat) {
-      clearInterval(tryOpen);
-      window.botpressWebChat.sendEvent({ type: 'show' });
-    }
-  }, 400);
-  // stop trying after ~8s and show the fallback note instead
-  setTimeout(() => {
-    clearInterval(tryOpen);
-    if (!window.botpressWebChat) {
-      const note = document.getElementById('fallbackNote');
-      if (note) note.classList.add('show');
-    }
-  }, 8000);
-});
