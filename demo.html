@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Demo — JobReady SG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="demo">
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo" data-transition>
+    <span class="nav-badge">JR</span>
+    <span class="nav-name">JobReady SG</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="home" data-transition>Home</a></li>
+    <li><a href="agents.html" data-page="agents" data-transition>AI Team</a></li>
+    <li><a href="demo.html" data-page="demo" data-transition>Demo</a></li>
+    <li><a href="faq.html" data-page="faq" data-transition>FAQ</a></li>
+    <li><a href="about.html" data-page="about" data-transition>About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="chat.html" class="btn btn-primary btn-sm" data-transition>Start Chat</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="index.html" data-page="home" data-transition>Home</a>
+  <a href="agents.html" data-page="agents" data-transition>AI Team</a>
+  <a href="demo.html" data-page="demo" data-transition>Demo</a>
+  <a href="faq.html" data-page="faq" data-transition>FAQ</a>
+  <a href="about.html" data-page="about" data-transition>About</a>
+  <a href="chat.html" data-page="chat" data-transition>Start Chat</a>
+</div>
+
+<div class="page-header">
+  <div class="eyebrow-sm">See It In Action</div>
+  <h1 class="page-title">Watch how JobReady SG works</h1>
+  <p class="page-sub">A recorded walkthrough, a sample conversation, and a look at the multi-agent pipeline behind every reply.</p>
+</div>
+
+<!-- VIDEO -->
+<section class="section section-tight">
+  <h2 class="block-title">Demo video</h2>
+  <div class="video-shell">
+    <div class="video-frame">
+      <button class="play-btn" aria-label="Play demo video">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+      </button>
+    </div>
+    <div class="video-caption">Placeholder — replace this frame with your recorded walkthrough (embed a file or YouTube link here).</div>
+  </div>
+</section>
+
+<!-- EXAMPLE CONVERSATION -->
+<section class="section section-alt">
+  <h2 class="block-title">Example conversation</h2>
+  <div class="convo-shell" id="demoBody">
+    <div class="convo-msg user"><span class="avatar avatar-user">You</span><span class="bubble">I want to become a Business Analyst.</span></div>
+    <div class="convo-msg bot"><span class="avatar avatar-bot">JR</span><span class="bubble">Let's begin by reviewing your resume.</span></div>
+    <div class="convo-msg bot"><span class="avatar avatar-bot">JR</span><span class="bubble">Here are three improvements you can make.</span></div>
+    <div class="convo-msg bot"><span class="avatar avatar-bot">JR</span><span class="bubble">Now let's practise some interview questions.</span></div>
+    <div class="convo-msg bot"><span class="avatar avatar-bot">JR</span><span class="bubble">Here are current hiring trends for BAs in Singapore.</span></div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section class="section">
+  <h2 class="block-title">How your question becomes an answer</h2>
+  <div class="arch-shell">
+    <div class="arch-flow">
+      <div class="arch-node" data-n="1">USER</div>
+      <div class="arch-connector" data-c="1"></div>
+      <div class="arch-node" data-n="2">BOTPRESS</div>
+      <div class="arch-connector" data-c="2"></div>
+      <div class="arch-node" data-n="3">SUPERVISOR AGENT (Gemini)</div>
+      <div class="arch-connector" data-c="3"></div>
+      <div class="arch-branch">
+        <div class="arch-node" data-n="4a">RESUME AGENT</div>
+        <div class="arch-node" data-n="4b">INTERVIEW AGENT</div>
+        <div class="arch-node" data-n="4c">INDUSTRY AGENT</div>
+      </div>
+      <div class="arch-connector" data-c="4"></div>
+      <div class="arch-node" data-n="5">GEMINI + NOTEBOOKLM (RAG)</div>
+      <div class="arch-connector" data-c="5"></div>
+      <div class="arch-node" data-n="6">RESPONSE</div>
+    </div>
+    <div class="arch-run">
+      <button class="btn btn-ghost btn-sm" onclick="runArchDemo()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        Simulate a request
+      </button>
+    </div>
+    <p class="arch-caption">A real multi-agent pipeline — not a single chatbot pretending to be smart.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="nav-badge">JR</span> JobReady SG</div>
+    <ul class="footer-links">
+      <li><a href="index.html" data-transition>Home</a></li>
+      <li><a href="agents.html" data-transition>AI Team</a></li>
+      <li><a href="demo.html" data-transition>Demo</a></li>
+      <li><a href="faq.html" data-transition>FAQ</a></li>
+      <li><a href="about.html" data-transition>About</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 JobReady SG — Republic Polytechnic · C240 Final Assessment</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

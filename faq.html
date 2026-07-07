@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FAQ — JobReady SG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="faq">
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo" data-transition>
+    <span class="nav-badge">JR</span>
+    <span class="nav-name">JobReady SG</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="home" data-transition>Home</a></li>
+    <li><a href="agents.html" data-page="agents" data-transition>AI Team</a></li>
+    <li><a href="demo.html" data-page="demo" data-transition>Demo</a></li>
+    <li><a href="faq.html" data-page="faq" data-transition>FAQ</a></li>
+    <li><a href="about.html" data-page="about" data-transition>About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="chat.html" class="btn btn-primary btn-sm" data-transition>Start Chat</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="index.html" data-page="home" data-transition>Home</a>
+  <a href="agents.html" data-page="agents" data-transition>AI Team</a>
+  <a href="demo.html" data-page="demo" data-transition>Demo</a>
+  <a href="faq.html" data-page="faq" data-transition>FAQ</a>
+  <a href="about.html" data-page="about" data-transition>About</a>
+  <a href="chat.html" data-page="chat" data-transition>Start Chat</a>
+</div>
+
+<div class="page-header">
+  <div class="eyebrow-sm">FAQ</div>
+  <h1 class="page-title">Good questions</h1>
+</div>
+
+<section class="section section-tight">
+  <details class="faq-item" open>
+    <summary>Does this replace career coaches?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></summary>
+    <p>No — it complements them. JobReady SG handles the repetitive first pass (resume checks, practice questions) so your time with a human career coach goes further.</p>
+  </details>
+  <details class="faq-item">
+    <summary>How does the AI generate recommendations?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></summary>
+    <p>A Supervisor Agent routes your message to the right specialist, which answers using Google Gemini grounded on a NotebookLM knowledge base built from RP and MOM career resources.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Is my information stored?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></summary>
+    <p>There's no live database of student conversations. The knowledge the agents draw on — RP and MOM career resources — was summarised once with NotebookLM into a fixed reference used by the Industry Tips Agent's prompt; your chat messages are only used to generate that session's reply.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Who is this designed for?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></summary>
+    <p>Republic Polytechnic students preparing for internships or their first full-time role.</p>
+  </details>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="nav-badge">JR</span> JobReady SG</div>
+    <ul class="footer-links">
+      <li><a href="index.html" data-transition>Home</a></li>
+      <li><a href="agents.html" data-transition>AI Team</a></li>
+      <li><a href="demo.html" data-transition>Demo</a></li>
+      <li><a href="faq.html" data-transition>FAQ</a></li>
+      <li><a href="about.html" data-transition>About</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 JobReady SG — Republic Polytechnic · C240 Final Assessment</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
