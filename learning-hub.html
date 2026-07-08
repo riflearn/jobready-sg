@@ -173,10 +173,12 @@
         resultDiv.innerHTML =
           '<p class="career-summary">' + data.summary + '</p>' +
           '<div class="career-list">' +
-            '<div class="career-item"><strong>Roles:</strong> ' + data.roles.join(', ') + '</div>' +
-            '<div class="career-item"><strong>Companies:</strong> ' + data.companies.join(', ') + '</div>' +
-            '<div class="career-item"><strong>Skills to build:</strong> ' + data.skills_to_build.join(', ') + '</div>' +
-            '<div class="career-item"><strong>Resources:</strong> ' + data.resources.join(', ') + '</div>' +
+            '<div class="career-item"><strong>Diploma:</strong> ' + data.diploma + '</div>' +
+            '<div class="career-item"><strong>Skills Learned:</strong> ' + data.skillsLearned + '</div>' +
+            '<div class="career-item"><strong>Career Roles:</strong> ' + data.careerRoles + '</div>' +
+            '<div class="career-item"><strong>Companies Hiring:</strong> ' + data.companiesHiring + '</div>' +
+            '<div class="career-item"><strong>Skills Employers Want:</strong> ' + data.skillsEmployersWant + '</div>' +
+            '<div class="career-item"><strong>Resources:</strong> ' + data.resources + '</div>' +
           '</div>';
       })
       .catch(function () {
