@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Learning Hub — JobReady SG</title>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="hub">
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-badge">JR</span>
+    <span class="nav-name">JobReady SG</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="home">Home</a></li>
+    <li><a href="agents.html" data-page="agents">AI Team</a></li>
+    <li><a href="learning-hub.html" data-page="hub">Learning Hub</a></li>
+    <li><a href="demo.html" data-page="demo">Demo</a></li>
+    <li><a href="faq.html" data-page="faq">FAQ</a></li>
+    <li><a href="about.html" data-page="about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <a href="chat.html" class="btn btn-primary btn-sm">Start Chat</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="index.html" data-page="home">Home</a>
+  <a href="agents.html" data-page="agents">AI Team</a>
+  <a href="learning-hub.html" data-page="hub">Learning Hub</a>
+  <a href="demo.html" data-page="demo">Demo</a>
+  <a href="faq.html" data-page="faq">FAQ</a>
+  <a href="about.html" data-page="about">About</a>
+  <a href="chat.html" data-page="chat">Start Chat</a>
+</div>
+
+<div class="page-header">
+  <div class="eyebrow-sm">Your Learning Hub</div>
+  <h1 class="page-title">Find Your Career Pathway</h1>
+  <p class="page-sub">Select your diploma below to see matched roles, companies, and skills to build.</p>
+</div>
+
+<section class="section section-tight">
+  <div class="sk-form-card" style="max-width:640px;margin:0 auto 2rem;">
+    <label for="diplomaSelect" class="sk-label">Select your school and diploma:</label>
+    <select id="diplomaSelect" class="sk-select">
+      <option value="">-- Choose your diploma --</option>
+      <optgroup label="School of Applied Science">
+        <option value="Diploma in Applied Chemistry">Diploma in Applied Chemistry</option>
+        <option value="Diploma in Biological Sciences">Diploma in Biological Sciences</option>
+        <option value="Diploma in Biomedical Science">Diploma in Biomedical Science</option>
+        <option value="Diploma in Environmental & Marine Science">Diploma in Environmental & Marine Science</option>
+        <option value="Diploma in Pharmaceutical Science">Diploma in Pharmaceutical Science</option>
+      </optgroup>
+      <optgroup label="School of Business">
+        <option value="Diploma in Business">Diploma in Business</option>
+        <option value="Diploma in Consumer Insights & Psychology">Diploma in Consumer Insights & Psychology</option>
+        <option value="Diploma in Defence & Security Management">Diploma in Defence & Security Management</option>
+        <option value="Diploma in Human Resource Management with Psychology">Diploma in Human Resource Management with Psychology</option>
+        <option value="Diploma in Mass Communication">Diploma in Mass Communication</option>
+      </optgroup>
+      <optgroup label="School of Engineering">
+        <option value="Diploma in Aerospace Engineering">Diploma in Aerospace Engineering</option>
+        <option value="Diploma in Aviation Management">Diploma in Aviation Management</option>
+        <option value="Diploma in Business Process & Engineering Management">Diploma in Business Process & Engineering Management</option>
+        <option value="Diploma in Electrical & Electronic Engineering">Diploma in Electrical & Electronic Engineering</option>
+        <option value="Diploma in Engineering">Diploma in Engineering</option>
+        <option value="Diploma in Mobility & Robotic Systems">Diploma in Mobility & Robotic Systems</option>
+        <option value="Diploma in Supply Chain Management">Diploma in Supply Chain Management</option>
+        <option value="Diploma in Sustainable Built Environment">Diploma in Sustainable Built Environment</option>
+      </optgroup>
+      <optgroup label="School of Hospitality">
+        <option value="Diploma in Hospitality & Tourism Management">Diploma in Hospitality & Tourism Management</option>
+        <option value="Diploma in Hotel & Leisure Management">Diploma in Hotel & Leisure Management</option>
+        <option value="Diploma in Events & Project Management">Diploma in Events & Project Management</option>
+        <option value="Diploma in Restaurant & Culinary Management">Diploma in Restaurant & Culinary Management</option>
+      </optgroup>
+      <optgroup label="School of Infocomm">
+        <option value="Diploma in Applied AI & Analytics">Diploma in Applied AI & Analytics</option>
+        <option value="Diploma in Cybersecurity & Digital Forensics">Diploma in Cybersecurity & Digital Forensics</option>
+        <option value="Diploma in Enterprise Cloud Computing & Management">Diploma in Enterprise Cloud Computing & Management</option>
+        <option value="Diploma in Financial Technology">Diploma in Financial Technology</option>
+        <option value="Diploma in Information Technology">Diploma in Information Technology</option>
+      </optgroup>
+      <optgroup label="School of Sports and Health">
+        <option value="Diploma in Integrated Community Care">Diploma in Integrated Community Care</option>
+        <option value="Diploma in Outdoor Education">Diploma in Outdoor Education</option>
+        <option value="Diploma in Sport Coaching">Diploma in Sport Coaching</option>
+        <option value="Diploma in Sport & Exercise Science">Diploma in Sport & Exercise Science</option>
+        <option value="Diploma in Sports & Health">Diploma in Sports & Health</option>
+      </optgroup>
+      <optgroup label="School of Technology for Arts, Media and Design">
+        <option value="Diploma in Arts & Entertainment Production Management">Diploma in Arts & Entertainment Production Management</option>
+        <option value="Diploma in Design">Diploma in Design</option>
+        <option value="Diploma in Digital Content Creation">Diploma in Digital Content Creation</option>
+        <option value="Diploma in Sonic Arts">Diploma in Sonic Arts</option>
+      </optgroup>
+    </select>
+    <button class="btn btn-primary" id="getCareerPathwayBtn" style="margin-top:1.2rem;width:100%;justify-content:center;">
+      Get My Career Pathway →
+    </button>
+  </div>
+
+  <div class="career-pathway-wrap" id="careerPathwayResult"></div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="nav-badge">JR</span> JobReady SG</div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="agents.html">AI Team</a></li>
+      <li><a href="learning-hub.html">Learning Hub</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 JobReady SG — Republic Polytechnic · C240 Final Assessment</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+(function () {
+  var btn = document.getElementById('getCareerPathwayBtn');
+  var resultDiv = document.getElementById('careerPathwayResult');
+  var WEBHOOK_URL = 'https://n8ngc.codeblazar.org/webhook/fea47b56-eeea-4198-b3c1-08b106b80ca0';
+
+  btn.addEventListener('click', function () {
+    var diploma = document.getElementById('diplomaSelect').value;
+    if (!diploma) {
+      resultDiv.innerHTML = '<p class="career-error">Please select a diploma first.</p>';
+      return;
+    }
+
+    resultDiv.innerHTML =
+      '<div class="skeleton" style="height:20px;width:80%;margin-bottom:10px;"></div>' +
+      '<div class="skeleton" style="height:120px;"></div>';
+
+    var controller = new AbortController();
+    var timeout = setTimeout(function () { controller.abort(); }, 15000);
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ diploma: diploma }),
+      signal: controller.signal
+    })
+      .then(function (res) { return res.text(); })
+      .then(function (rawText) {
+        clearTimeout(timeout);
+        var cleaned = rawText.replace(/```json|```/g, '').trim();
+        var data = JSON.parse(cleaned);
+
+        resultDiv.innerHTML =
+          '<p class="career-summary">' + data.summary + '</p>' +
+          '<div class="career-list">' +
+            '<div class="career-item"><strong>Roles:</strong> ' + data.roles.join(', ') + '</div>' +
+            '<div class="career-item"><strong>Companies:</strong> ' + data.companies.join(', ') + '</div>' +
+            '<div class="career-item"><strong>Skills to build:</strong> ' + data.skills_to_build.join(', ') + '</div>' +
+            '<div class="career-item"><strong>Resources:</strong> ' + data.resources.join(', ') + '</div>' +
+          '</div>';
+      })
+      .catch(function () {
+        clearTimeout(timeout);
+        resultDiv.innerHTML =
+          '<div class="career-error">Could not load your career pathway right now. Check your connection or try again. ' +
+          '<button class="btn btn-ghost btn-sm" id="retryCareerBtn">Retry</button></div>';
+        document.getElementById('retryCareerBtn').addEventListener('click', function () { btn.click(); });
+      });
+  });
+})();
+</script>
+</body>
+</html>

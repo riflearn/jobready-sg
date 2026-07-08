@@ -28,6 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
     panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => panel.classList.remove('open')));
   }
 
+  /* ---------- dark/light theme toggle ----------
+     Initial theme is already applied by an inline script in <head>
+     (before first paint, to avoid a flash of the wrong theme). This
+     just wires up the button to flip it and remember the choice. */
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const next = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  }
+
   /* ---------- scroll-triggered fade-in for cards and blocks ---------- */
   const revealSelectors = [
     '.agent-card', '.jstep', '.team-card', '.tech-badge', '.faq-item',

@@ -4,6 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>JobReady SG — AI Career Coach for Republic Polytechnic Students</title>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
@@ -19,11 +26,16 @@
   <ul class="nav-links">
     <li><a href="index.html" data-page="home">Home</a></li>
     <li><a href="agents.html" data-page="agents">AI Team</a></li>
+    <li><a href="learning-hub.html" data-page="hub">Learning Hub</a></li>
     <li><a href="demo.html" data-page="demo">Demo</a></li>
     <li><a href="faq.html" data-page="faq">FAQ</a></li>
     <li><a href="about.html" data-page="about">About</a></li>
   </ul>
   <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
     <a href="chat.html" class="btn btn-primary btn-sm">Start Chat</a>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -33,6 +45,7 @@
 <div class="mobile-panel" id="mobilePanel">
   <a href="index.html" data-page="home">Home</a>
   <a href="agents.html" data-page="agents">AI Team</a>
+  <a href="learning-hub.html" data-page="hub">Learning Hub</a>
   <a href="demo.html" data-page="demo">Demo</a>
   <a href="faq.html" data-page="faq">FAQ</a>
   <a href="about.html" data-page="about">About</a>
@@ -70,7 +83,7 @@
         </div>
         <div class="note note--1">
           <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden="true">
-            <path class="draw-in" d="M18 2C10 2 2 8 3 16C3.6 21 9 22 12 20" stroke="#A93226" stroke-width="2" stroke-linecap="round"/>
+            <path class="draw-in" d="M18 2C10 2 2 8 3 16C3.6 21 9 22 12 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
           which project — what did <em>you</em> build?
         </div>
@@ -79,14 +92,14 @@
           <span class="circle-word">
             Helped
             <svg viewBox="0 0 70 34" aria-hidden="true">
-              <ellipse class="draw-in d2" cx="35" cy="17" rx="33" ry="15" fill="none" stroke="#A93226" stroke-width="2"/>
+              <ellipse class="draw-in d2" cx="35" cy="17" rx="33" ry="15" fill="none" stroke="currentColor" stroke-width="2"/>
             </svg>
           </span>
           organise an event for 200 students
         </div>
         <div class="note note--2">
           <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden="true">
-            <path class="draw-in d3" d="M18 2C10 2 2 8 3 16C3.6 21 9 22 12 20" stroke="#A93226" stroke-width="2" stroke-linecap="round"/>
+            <path class="draw-in d3" d="M18 2C10 2 2 8 3 16C3.6 21 9 22 12 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
           nice — now add the result. attendance up 30%?
         </div>
@@ -123,32 +136,32 @@
   <h2 class="block-title">Three specialists, one chat</h2>
   <p class="page-sub" style="margin-bottom:2rem;">Each one focuses on a single job, so the advice stays specific instead of generic.</p>
   <div class="coach-cards">
-    <div class="coach-card">
+    <div class="coach-card coach-resume">
       <div class="coach-card__icon">
         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
-          <circle cx="15" cy="15" r="12" stroke="#A93226" stroke-width="2"/>
-          <path d="M10 15.5L13.5 19L20.5 11" stroke="#A93226" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="15" cy="15" r="12" stroke="currentColor" stroke-width="2"/>
+          <path d="M10 15.5L13.5 19L20.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <p class="coach-card__title">Resume Agent</p>
       <p class="coach-card__body">Sends back specific line edits, not generic praise. Tells you what to cut, what to quantify, and what recruiters skim straight past.</p>
     </div>
-    <div class="coach-card">
+    <div class="coach-card coach-interview">
       <div class="coach-card__icon">
         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
-          <rect x="9" y="4" width="12" height="18" rx="6" stroke="#1C2B45" stroke-width="2"/>
-          <path d="M6 15C6 19.5 10 23 15 23C20 23 24 19.5 24 15" stroke="#1C2B45" stroke-width="2" stroke-linecap="round"/>
-          <path d="M15 23V27" stroke="#1C2B45" stroke-width="2" stroke-linecap="round"/>
+          <rect x="9" y="4" width="12" height="18" rx="6" stroke="currentColor" stroke-width="2"/>
+          <path d="M6 15C6 19.5 10 23 15 23C20 23 24 19.5 24 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M15 23V27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </div>
       <p class="coach-card__title">Interview Agent</p>
       <p class="coach-card__body">Runs a mock interview for your industry, then asks realistic follow-up questions based on how you answer.</p>
     </div>
-    <div class="coach-card">
+    <div class="coach-card coach-industry">
       <div class="coach-card__icon">
         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
-          <path d="M5 25V17M14 25V10M23 25V14" stroke="#1F7A53" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M4 8L11 4L18 7L25 3" stroke="#1F7A53" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 25V17M14 25V10M23 25V14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M4 8L11 4L18 7L25 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <p class="coach-card__title">Industry Tips Agent</p>
@@ -164,6 +177,7 @@
     <ul class="footer-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="agents.html">AI Team</a></li>
+      <li><a href="learning-hub.html">Learning Hub</a></li>
       <li><a href="demo.html">Demo</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="about.html">About</a></li>
