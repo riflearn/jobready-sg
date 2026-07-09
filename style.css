@@ -467,6 +467,7 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
 .profile-website-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.92rem;color:var(--green);text-decoration:none;font-weight:600;}
 .profile-website-link:hover{text-decoration:underline;}
 .profile-body{font-size:.95rem;color:var(--text);line-height:1.7;}
+.profile-body--empty{color:var(--muted-2);font-style:italic;}
 
 /* ---------- RESUME BUILDER: PATH SELECTOR ---------- */
 .path-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}

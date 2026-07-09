@@ -100,6 +100,15 @@
     return /^https?:\/\//i.test(s) ? s : 'https://' + s;
   }
 
+  // n8n returns an unresolved expression template (e.g. "{{ $json.Overview }}")
+  // when a workflow node isn't wired up correctly. Treat those - and empty
+  // values - as "no data" so students never see raw template syntax on screen.
+  function cleanField(val) {
+    var s = String(val == null ? '' : val).trim();
+    if (!s || /^\{\{[\s\S]*\}\}$/.test(s)) return '';
+    return s;
+  }
+
   var content = document.getElementById('flowContent');
   var titleEl = document.getElementById('cpCompanyName');
   var industryEl = document.getElementById('cpIndustry');
@@ -123,19 +132,33 @@
   }
 
   function renderProfile(data) {
-    titleEl.textContent = data.company || company;
-    industryEl.textContent = data.industry || 'Company Profile';
+    var name = cleanField(data.company) || company;
+    var industry = cleanField(data.industry);
+    var overview = cleanField(data.overview);
+    var website = cleanField(data.website);
+    var expectations = cleanField(data.expectations);
 
-    var siteUrl = websiteUrl(data.website);
+    titleEl.textContent = name;
+    industryEl.textContent = industry || 'Company Profile';
+
+    var overviewHtml = overview
+      ? '<p class="profile-body">' + escapeHtml(overview) + '</p>'
+      : '<p class="profile-body profile-body--empty">Not available yet.</p>';
+
+    var siteUrl = websiteUrl(website);
     var websiteHtml = siteUrl
       ? '<a class="profile-website-link" href="' + escapeHtml(siteUrl) + '" target="_blank" rel="noopener">' +
-          escapeHtml(data.website) + ' &rarr;</a>'
-      : '<p class="profile-body">Not available.</p>';
+          escapeHtml(website) + ' &rarr;</a>'
+      : '<p class="profile-body profile-body--empty">Not available yet.</p>';
+
+    var expectationsHtml = expectations
+      ? '<p class="profile-body">' + escapeHtml(expectations) + '</p>'
+      : '<p class="profile-body profile-body--empty">Not available yet.</p>';
 
     content.innerHTML =
       '<div class="pathway-card pathway-card-full">' +
         '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span class="pathway-card__title">Overview</span></div>' +
-        '<p class="profile-body">' + escapeHtml(data.overview) + '</p>' +
+        overviewHtml +
       '</div>' +
       '<div class="pathway-card pathway-card-full">' +
         '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span class="pathway-card__title">Website</span></div>' +
@@ -143,7 +166,7 @@
       '</div>' +
       '<div class="pathway-card pathway-card-full">' +
         '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span class="pathway-card__title">What They Look For</span></div>' +
-        '<p class="profile-body">' + escapeHtml(data.expectations) + '</p>' +
+        expectationsHtml +
       '</div>' +
       '<div style="text-align:center;margin-top:2rem;">' +
         '<button class="btn btn-primary" id="startQuizBtn">Start Company Quiz &rarr;</button>' +
@@ -151,10 +174,10 @@
 
     document.getElementById('startQuizBtn').addEventListener('click', function () {
       sessionStorage.setItem('jobready_quiz_data', JSON.stringify({
-        company: data.company || company,
-        expectations: data.expectations || ''
+        company: name,
+        expectations: expectations
       }));
-      window.location.href = 'company-quiz.html?company=' + encodeURIComponent(data.company || company);
+      window.location.href = 'company-quiz.html?company=' + encodeURIComponent(name);
     });
   }
 
