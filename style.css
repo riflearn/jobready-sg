@@ -209,6 +209,10 @@ nav.site-nav{
   display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-11deg);
   mix-blend-mode:multiply;opacity:0;animation:stamp-in .5s ease-out 1.1s forwards;background:rgba(255,255,255,.4);
 }
+/* multiply only reads as a translucent stamp on a light card - against
+   a dark card it just approaches the card's own color and disappears,
+   so dark theme gets a normal blend with a light low-opacity fill instead. */
+:root[data-theme="dark"] .stamp{mix-blend-mode:normal;background:rgba(233,236,242,.12);}
 @keyframes stamp-in{0%{opacity:0;transform:rotate(-11deg) scale(1.6);}70%{opacity:1;transform:rotate(-11deg) scale(.94);}100%{opacity:1;transform:rotate(-11deg) scale(1);}}
 .draw-in{stroke-dasharray:220;stroke-dashoffset:220;animation:draw .7s ease forwards;}
 .draw-in.d2{animation-delay:.35s;}
@@ -503,12 +507,15 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
   background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2rem;
   transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
 }
-.path-card:hover{transform:translateY(-4px);border-color:var(--muted-2);box-shadow:var(--shadow);}
+.path-card:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:var(--shadow);}
+.path-card:hover .path-card__title{color:var(--green);}
+.path-card:hover .path-card__icon{background:var(--green);color:#fff;}
 .path-card__icon{
   width:46px;height:46px;border-radius:12px;background:var(--green-soft);color:var(--green);
   display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;
+  transition:background .25s ease,color .25s ease;
 }
-.path-card__title{font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:.6rem;}
+.path-card__title{font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:.6rem;transition:color .25s ease;}
 .path-card__body{font-size:.9rem;color:var(--muted);}
 
 /* ---------- RESUME BUILDER: FORM ---------- */
@@ -517,6 +524,14 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
 .builder-form{display:flex;flex-direction:column;gap:1.4rem;}
 .form-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
 .form-section--quickstart{background:var(--green-soft);border:1px dashed var(--green);}
+
+.btn-spinner{
+  display:inline-block;width:14px;height:14px;flex-shrink:0;
+  border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;
+  animation:btn-spin .7s linear infinite;
+}
+@keyframes btn-spin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion: reduce){.btn-spinner{animation:none;}}
 .form-section__title{font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1rem;color:var(--muted-2);}
 .form-row{margin-bottom:.8rem;}
 .form-row:last-child{margin-bottom:0;}

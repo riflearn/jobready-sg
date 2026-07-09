@@ -285,8 +285,10 @@
       }
       if (formHasContent() && !confirm('This will replace what you\'ve already entered in the form below. Continue?')) return;
 
+      var originalBtnHtml = generateTemplateBtn.innerHTML;
       hint.textContent = 'Generating a template for ' + diploma + '…';
       generateTemplateBtn.disabled = true;
+      generateTemplateBtn.innerHTML = '<span class="btn-spinner"></span> Generating…';
 
       var controller = new AbortController();
       var timeout = setTimeout(function () { controller.abort(); }, 45000);
@@ -312,6 +314,7 @@
         })
         .finally(function () {
           generateTemplateBtn.disabled = false;
+          generateTemplateBtn.innerHTML = originalBtnHtml;
         });
     });
   }
