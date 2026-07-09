@@ -12,7 +12,46 @@
 // elements when it knows the observer below will actually run.
 document.documentElement.classList.add('js-ready');
 
+/* ---------- shared auth session helpers ----------
+   Used here to render nav login state, and by signup.html/login.html
+   after a successful webhook call. Session is just {name, email, token} -
+   there's no protected data behind it yet, so trusting localStorage is
+   fine for now; a real protected endpoint would need to validate the
+   token server-side, not just check that it's present client-side. */
+window.jrAuth = {
+  KEY: 'jobready_session',
+  getSession: function () {
+    try { return JSON.parse(localStorage.getItem(this.KEY)); } catch (e) { return null; }
+  },
+  setSession: function (session) {
+    localStorage.setItem(this.KEY, JSON.stringify(session));
+  },
+  clearSession: function () {
+    localStorage.removeItem(this.KEY);
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+
+  /* ---------- auth state in nav (desktop + mobile) ---------- */
+  (function () {
+    var session = window.jrAuth.getSession();
+    [document.getElementById('authArea'), document.getElementById('authAreaMobile')].forEach((el) => {
+      if (!el) return;
+      if (session && session.name) {
+        var firstName = String(session.name).split(' ')[0]
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        el.innerHTML = '<span class="auth-chip"><span class="auth-chip__name">Hi, ' + firstName + '</span>' +
+          '<button class="auth-chip__logout" type="button">Log Out</button></span>';
+        el.querySelector('.auth-chip__logout').addEventListener('click', () => {
+          window.jrAuth.clearSession();
+          window.location.reload();
+        });
+      } else {
+        el.innerHTML = '<a href="login.html" class="auth-login-link">Log In</a>';
+      }
+    });
+  })();
 
   /* ---------- highlight the active nav link ---------- */
   const page = document.body.dataset.page;

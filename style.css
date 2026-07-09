@@ -469,6 +469,32 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
 .profile-body{font-size:.95rem;color:var(--text);line-height:1.7;}
 .profile-body--empty{color:var(--muted-2);font-style:italic;}
 
+/* ---------- AUTH (nav state + signup/login pages) ---------- */
+.auth-area{display:flex;align-items:center;}
+.auth-login-link{font-size:.88rem;font-weight:600;color:var(--text);text-decoration:none;padding:.5rem .9rem;border-radius:8px;transition:background .2s ease;}
+.auth-login-link:hover{background:var(--card-hover);}
+.auth-chip{display:flex;align-items:center;gap:.6rem;font-size:.85rem;}
+.auth-chip__name{font-weight:600;color:var(--text);}
+.auth-chip__logout{background:none;border:none;color:var(--muted-2);font-size:.8rem;font-weight:600;cursor:pointer;text-decoration:underline;padding:0;font-family:var(--font-body);}
+.auth-chip__logout:hover{color:var(--red);}
+
+.auth-area-mobile{padding:1rem 0 .5rem;border-top:1px solid var(--hairline);margin-top:.5rem;}
+.auth-area-mobile .auth-login-link{display:block;padding:.6rem 0;}
+.auth-area-mobile .auth-chip{flex-direction:row;justify-content:space-between;padding:.6rem 0;}
+
+.auth-shell{max-width:440px;margin:0 auto;}
+.auth-divider{display:flex;align-items:center;gap:.8rem;margin:1.6rem 0;color:var(--muted-2);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--hairline);}
+.auth-switch{text-align:center;margin-top:1.4rem;font-size:.9rem;color:var(--muted);}
+.auth-switch a{color:var(--green);font-weight:600;text-decoration:none;}
+.auth-switch a:hover{text-decoration:underline;}
+.auth-error{background:var(--red-soft);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:.8rem 1rem;font-size:.85rem;margin-bottom:1.2rem;display:none;}
+.auth-error.show{display:block;}
+.auth-note{color:var(--muted-2);font-size:.8rem;text-align:center;margin-top:.8rem;}
+.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:.7rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;font-family:var(--font-body);font-size:.9rem;font-weight:600;color:var(--text);cursor:pointer;transition:border-color .2s ease,background .2s ease;}
+.google-btn:hover{border-color:var(--muted-2);background:var(--card-hover);}
+.google-btn:disabled{opacity:.6;cursor:not-allowed;}
+
 /* ---------- RESUME BUILDER: PATH SELECTOR ---------- */
 .path-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
 @media(max-width:800px){.path-grid{grid-template-columns:1fr;}}
@@ -641,6 +667,7 @@ html.js-ready .reveal-target.reveal-done{animation:none;opacity:1;}
 /* ---------- RESPONSIVE ---------- */
 @media(max-width:860px){
   .nav-links{display:none;}
+  .auth-area{display:none;}
   .nav-toggle{display:flex;}
   .hero{padding-top:calc(var(--nav-h) + 2rem);}
   .page-header{padding-top:calc(var(--nav-h) + 2rem);}

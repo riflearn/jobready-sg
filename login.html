@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Log In — JobReady SG</title>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body data-page="login">
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+    <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="home">Home</a></li>
+    <li><a href="agents.html" data-page="agents">AI Team</a></li>
+    <li><a href="learning-hub.html" data-page="hub">Learning Hub</a></li>
+    <li><a href="resume-builder.html" data-page="resume">Resume Builder</a></li>
+    <li><a href="demo.html" data-page="demo">Demo</a></li>
+    <li><a href="faq.html" data-page="faq">FAQ</a></li>
+    <li><a href="about.html" data-page="about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <span id="authArea" class="auth-area"></span>
+    <a href="chat.html" class="btn btn-primary btn-sm">Start Chat</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="index.html" data-page="home">Home</a>
+  <a href="agents.html" data-page="agents">AI Team</a>
+  <a href="learning-hub.html" data-page="hub">Learning Hub</a>
+  <a href="resume-builder.html" data-page="resume">Resume Builder</a>
+  <a href="demo.html" data-page="demo">Demo</a>
+  <a href="faq.html" data-page="faq">FAQ</a>
+  <a href="about.html" data-page="about">About</a>
+  <a href="chat.html" data-page="chat">Start Chat</a>
+  <div id="authAreaMobile" class="auth-area-mobile"></div>
+</div>
+
+<div class="page-header">
+  <div class="eyebrow-sm">Welcome Back</div>
+  <h1 class="page-title">Log In</h1>
+  <p class="page-sub">Continue your career journey with JobReady SG.</p>
+</div>
+
+<section class="section section-tight">
+  <div class="auth-shell sk-form-card">
+    <div class="auth-error" id="loginError"></div>
+
+    <button class="google-btn" id="googleLoginBtn" type="button">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"></path><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"></path><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4C29.6 35.4 26.9 36 24 36c-5.3 0-9.7-3.1-11.3-7.9l-6.6 5.1C9.6 39.6 16.3 44 24 44z"></path><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.5l6.6 5.4C41.5 36.4 44 30.7 44 24c0-1.3-.1-2.7-.4-3.5z"></path></svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-divider">or</div>
+
+    <form id="loginForm">
+      <div class="form-row">
+        <input type="email" class="form-input" id="loginEmail" placeholder="Email" required>
+      </div>
+      <div class="form-row">
+        <input type="password" class="form-input" id="loginPassword" placeholder="Password" required>
+      </div>
+      <button class="btn btn-primary" type="submit" id="loginSubmitBtn" style="width:100%;justify-content:center;margin-top:.6rem;">
+        Log In
+      </button>
+    </form>
+
+    <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+      <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="agents.html">AI Team</a></li>
+      <li><a href="learning-hub.html">Learning Hub</a></li>
+      <li><a href="resume-builder.html">Resume Builder</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 JobReady SG — Republic Polytechnic · C240 Final Assessment</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+(function () {
+  // TODO: replace with the real Google Cloud OAuth Client ID once created.
+  var GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+  var GOOGLE_AUTH_WEBHOOK_URL = 'https://n8ngc.codeblazar.org/webhook/auth-google';
+  var LOGIN_WEBHOOK_URL = 'https://n8ngc.codeblazar.org/webhook/login-email';
+
+  var errorEl = document.getElementById('loginError');
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('show');
+  }
+  function hideError() {
+    errorEl.classList.remove('show');
+  }
+
+  function goAfterLogin() {
+    window.location.href = 'index.html';
+  }
+
+  /* ---------- email/password login ---------- */
+  var form = document.getElementById('loginForm');
+  var submitBtn = document.getElementById('loginSubmitBtn');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    hideError();
+    var email = document.getElementById('loginEmail').value.trim();
+    var password = document.getElementById('loginPassword').value;
+    if (!email || !password) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Logging in…';
+
+    var controller = new AbortController();
+    var timeout = setTimeout(function () { controller.abort(); }, 15000);
+
+    fetch(LOGIN_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password }),
+      signal: controller.signal
+    })
+      .then(function (res) { return res.text(); })
+      .then(function (rawText) {
+        clearTimeout(timeout);
+        var cleaned = rawText.replace(/```json|```/g, '').trim();
+        var data = JSON.parse(cleaned);
+        if (!data || data.success === false || !data.token) {
+          showError(data && data.error ? data.error : 'Incorrect email or password.');
+          return;
+        }
+        window.jrAuth.setSession({ name: data.name, email: data.email || email, token: data.token });
+        goAfterLogin();
+      })
+      .catch(function () {
+        clearTimeout(timeout);
+        showError('Could not log in right now. Check your connection or try again.');
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Log In';
+      });
+  });
+
+  /* ---------- Google sign-in ---------- */
+  var googleBtn = document.getElementById('googleLoginBtn');
+  var googleConfigured = GOOGLE_CLIENT_ID.indexOf('YOUR_GOOGLE_CLIENT_ID') !== 0;
+
+  function handleGoogleCredential(response) {
+    hideError();
+    fetch(GOOGLE_AUTH_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken: response.credential })
+    })
+      .then(function (res) { return res.text(); })
+      .then(function (rawText) {
+        var cleaned = rawText.replace(/```json|```/g, '').trim();
+        var data = JSON.parse(cleaned);
+        if (!data || data.success === false || !data.token) {
+          showError(data && data.error ? data.error : 'Could not sign in with Google.');
+          return;
+        }
+        window.jrAuth.setSession({ name: data.name, email: data.email, token: data.token });
+        goAfterLogin();
+      })
+      .catch(function () {
+        showError('Could not sign in with Google right now. Try again.');
+      });
+  }
+
+  if (googleConfigured && typeof google !== 'undefined') {
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
+    googleBtn.addEventListener('click', function () { google.accounts.id.prompt(); });
+  } else {
+    googleBtn.addEventListener('click', function () {
+      showError('Google Sign-In isn\'t set up yet — use email and password below.');
+    });
+  }
+})();
+</script>
+</body>
+</html>
