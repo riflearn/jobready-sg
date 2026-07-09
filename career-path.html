@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Career Path — JobReady SG</title>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="hub">
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+    <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="home">Home</a></li>
+    <li><a href="agents.html" data-page="agents">AI Team</a></li>
+    <li><a href="learning-hub.html" data-page="hub">Learning Hub</a></li>
+    <li><a href="resume-builder.html" data-page="resume">Resume Builder</a></li>
+    <li><a href="demo.html" data-page="demo">Demo</a></li>
+    <li><a href="faq.html" data-page="faq">FAQ</a></li>
+    <li><a href="about.html" data-page="about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <a href="chat.html" class="btn btn-primary btn-sm">Start Chat</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="index.html" data-page="home">Home</a>
+  <a href="agents.html" data-page="agents">AI Team</a>
+  <a href="learning-hub.html" data-page="hub">Learning Hub</a>
+  <a href="resume-builder.html" data-page="resume">Resume Builder</a>
+  <a href="demo.html" data-page="demo">Demo</a>
+  <a href="faq.html" data-page="faq">FAQ</a>
+  <a href="about.html" data-page="about">About</a>
+  <a href="chat.html" data-page="chat">Start Chat</a>
+</div>
+
+<div class="page-header">
+  <a href="skills.html" class="flow-back">&larr; Back to skills</a>
+  <div class="eyebrow-sm">Step 3 of 4</div>
+  <h1 class="page-title">Your Career Path</h1>
+  <p class="page-sub">Roles you can grow into after graduating.</p>
+  <div class="flow-progress">
+    <div class="flow-progress__bar"><div class="flow-progress__fill" style="width:75%"></div></div>
+    <div class="flow-progress__label">Step 3 of 4: Career Path</div>
+  </div>
+</div>
+
+<section class="section section-tight">
+  <div id="flowContent"></div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+      <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="agents.html">AI Team</a></li>
+      <li><a href="learning-hub.html">Learning Hub</a></li>
+      <li><a href="resume-builder.html">Resume Builder</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 JobReady SG — Republic Polytechnic · C240 Final Assessment</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+(function () {
+  var WAGE_RESOURCE_ID = '91a32dbf-9953-48e0-ab43-85fdd1c45b9d'; // MOM: Median/25th/75th pctile wages of common occupations by industry (data.gov.sg)
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function splitList(str) {
+    return String(str == null ? '' : str).split(',').map(function (s) {
+      var trimmed = s.trim();
+      if (trimmed.charAt(0) === '(' && trimmed.charAt(trimmed.length - 1) === ')') {
+        trimmed = trimmed.slice(1, -1).trim();
+      }
+      return trimmed;
+    }).filter(Boolean);
+  }
+
+  function significantWords(query) {
+    return query.split(/\s+/).filter(function (w) {
+      var isAcronym = w.length >= 2 && w === w.toUpperCase() && /[A-Z]/.test(w);
+      return w.length >= 3 || isAcronym;
+    });
+  }
+
+  function wordInDesc(w, desc) {
+    var lw = w.toLowerCase();
+    if (w.length < 3) return new RegExp('\\b' + lw + '\\b').test(desc);
+    return desc.indexOf(lw) !== -1;
+  }
+
+  function matchesRoleStrict(query, occDesc) {
+    var desc = occDesc.toLowerCase();
+    var words = significantWords(query);
+    if (!words.length) return false;
+    return words.every(function (w) { return wordInDesc(w, desc); });
+  }
+
+  function matchesRoleLoose(query, occDesc) {
+    var desc = occDesc.toLowerCase();
+    var words = significantWords(query);
+    if (!words.length) return false;
+    return words.some(function (w) { return wordInDesc(w, desc); });
+  }
+
+  function fetchWageRange(role) {
+    var url = 'https://data.gov.sg/api/action/datastore_search?resource_id=' + WAGE_RESOURCE_ID +
+      '&q=' + encodeURIComponent(role) + '&limit=30';
+    return fetch(url).then(function (res) { return res.json(); }).then(function (json) {
+      var records = (json.result && json.result.records) || [];
+      var strict = { lo: Infinity, hi: -Infinity };
+      var loose = { lo: Infinity, hi: -Infinity };
+      records.forEach(function (rec) {
+        var desc = rec.occ_desc || '';
+        var p25 = parseInt(rec.mthly_gross_wage_25_pctile, 10);
+        var p75 = parseInt(rec.mthly_gross_wage_75_pctile, 10);
+        if (isNaN(p25) || isNaN(p75)) return;
+        if (matchesRoleStrict(role, desc)) {
+          if (p25 < strict.lo) strict.lo = p25;
+          if (p75 > strict.hi) strict.hi = p75;
+        }
+        if (matchesRoleLoose(role, desc)) {
+          if (p25 < loose.lo) loose.lo = p25;
+          if (p75 > loose.hi) loose.hi = p75;
+        }
+      });
+      function isUseful(r) { return r.lo !== Infinity && r.hi <= r.lo * 6; }
+      if (isUseful(strict)) return { lo: strict.lo, hi: strict.hi, approx: false };
+      if (isUseful(loose)) return { lo: loose.lo, hi: loose.hi, approx: true };
+      return null;
+    }).catch(function () { return null; });
+  }
+
+  function loadPathwaySalaries(roles) {
+    roles.forEach(function (role, i) {
+      fetchWageRange(role).then(function (range) {
+        var el = document.getElementById('pwSalary' + i);
+        if (!el || !range) return;
+        el.textContent = (range.approx ? '~' : '') + '$' + range.lo.toLocaleString() + ' – $' + range.hi.toLocaleString() + '/mo';
+        if (range.approx) el.title = 'Broader estimate - based on related occupations, not an exact match';
+      });
+    });
+  }
+
+  var raw = sessionStorage.getItem('jobready_diploma_data');
+  var data = null;
+  try { data = raw ? JSON.parse(raw) : null; } catch (e) { data = null; }
+
+  var content = document.getElementById('flowContent');
+
+  if (!data || !data.diploma) {
+    content.innerHTML =
+      '<div class="flow-empty"><p>We couldn\'t find your diploma selection. Let\'s start there.</p>' +
+      '<a href="learning-hub.html" class="btn btn-primary">Choose Your Diploma &rarr;</a></div>';
+    return;
+  }
+
+  var roles = splitList(data.careerRoles);
+
+  var journeySteps = roles.map(function (r, i) {
+    var jobsUrl = 'https://www.mycareersfuture.gov.sg/search?search=' + encodeURIComponent(r) + '&sortBy=relevancy&page=0';
+    return '<div class="pathway-jstep"><div class="pathway-jstep-num">' + (i + 1) + '</div>' +
+      '<div class="pathway-jstep-title">' + escapeHtml(r) + '</div>' +
+      '<div class="pathway-jstep-salary" id="pwSalary' + i + '"></div>' +
+      '<a class="pathway-jstep-link" href="' + jobsUrl + '" target="_blank" rel="noopener">View jobs &rarr;</a>' +
+      '</div>';
+  }).join('');
+
+  content.innerHTML =
+    '<div class="pathway-card pathway-card-full">' +
+      '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg><span class="pathway-card__title">Career Path</span></div>' +
+      '<div class="pathway-journey">' + journeySteps + '</div>' +
+      '<div class="pathway-card__caption">Estimated monthly gross wage range (25th–75th percentile), Ministry of Manpower wage survey. "~" marks a broader estimate from related occupations rather than an exact match. "View jobs" links to MyCareersFuture search results for that role at every level — tick "Fresh/Entry Level" or "Junior Executive" there for listings closer to a diploma holder\'s.</div>' +
+    '</div>' +
+    '<div style="text-align:center;margin-top:2rem;">' +
+      '<a href="companies.html" class="btn btn-primary">View Companies Hiring &rarr;</a>' +
+    '</div>';
+
+  loadPathwaySalaries(roles);
+})();
+</script>
+</body>
+</html>
