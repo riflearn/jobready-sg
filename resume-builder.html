@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resume Builder — JobReady SG</title>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="resume">
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+    <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="home">Home</a></li>
+    <li><a href="agents.html" data-page="agents">AI Team</a></li>
+    <li><a href="learning-hub.html" data-page="hub">Learning Hub</a></li>
+    <li><a href="resume-builder.html" data-page="resume">Resume Builder</a></li>
+    <li><a href="demo.html" data-page="demo">Demo</a></li>
+    <li><a href="faq.html" data-page="faq">FAQ</a></li>
+    <li><a href="about.html" data-page="about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <a href="chat.html" class="btn btn-primary btn-sm">Start Chat</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="index.html" data-page="home">Home</a>
+  <a href="agents.html" data-page="agents">AI Team</a>
+  <a href="learning-hub.html" data-page="hub">Learning Hub</a>
+  <a href="resume-builder.html" data-page="resume">Resume Builder</a>
+  <a href="demo.html" data-page="demo">Demo</a>
+  <a href="faq.html" data-page="faq">FAQ</a>
+  <a href="about.html" data-page="about">About</a>
+  <a href="chat.html" data-page="chat">Start Chat</a>
+</div>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero__grid">
+    <div class="hero-inner">
+      <span class="eyebrow"><span class="dot"></span> Resume Builder</span>
+      <h1>Build a resume that actually gets <em>read</em>.</h1>
+      <p>Start from scratch with a live preview, or paste what you already have and get it sharpened by the Resume Agent.</p>
+      <div class="hero-btns">
+        <a href="#build" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Build From Scratch
+        </a>
+        <a href="#improve" class="btn btn-ghost">Improve My Resume</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="mock">
+        <p class="mock__label">resume_draft_v2.pdf — under review</p>
+        <p class="mock__section-title">EXPERIENCE</p>
+
+        <div class="mock__line mock__line--struck">
+          Worked on a group project for school
+        </div>
+        <div class="note note--1">
+          <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden="true">
+            <path class="draw-in" d="M18 2C10 2 2 8 3 16C3.6 21 9 22 12 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          which project — what did <em>you</em> build?
+        </div>
+
+        <div class="mock__line" style="margin-top:1.7rem;">
+          <span class="circle-word">
+            Helped
+            <svg viewBox="0 0 70 34" aria-hidden="true">
+              <ellipse class="draw-in d2" cx="35" cy="17" rx="33" ry="15" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </span>
+          organise an event for 200 students
+        </div>
+        <div class="note note--2">
+          <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden="true">
+            <path class="draw-in d3" d="M18 2C10 2 2 8 3 16C3.6 21 9 22 12 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          nice — now add the result. attendance up 30%?
+        </div>
+
+        <div class="stamp" aria-hidden="true">JOB<br>READY</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="path-grid">
+    <a href="#build" class="path-card">
+      <div class="path-card__icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </div>
+      <p class="path-card__title">Build From Scratch</p>
+      <p class="path-card__body">Fill in your details section by section and watch a clean resume take shape next to you, ready to print or save as PDF.</p>
+    </a>
+    <a href="#improve" class="path-card">
+      <div class="path-card__icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+      </div>
+      <p class="path-card__title">Improve My Resume</p>
+      <p class="path-card__body">Already have one? Paste it in and take it straight to the Resume Agent for specific, line-by-line feedback.</p>
+    </a>
+  </div>
+</section>
+
+<section class="section section-alt" id="build">
+  <h2 class="block-title">Build From Scratch</h2>
+  <p class="page-sub" style="margin-bottom:2rem;">Fill in what you have — the preview updates as you type. Nothing here is saved or sent anywhere; it stays on this page.</p>
+
+  <div class="builder-grid">
+    <div class="builder-form">
+      <div class="form-section">
+        <h3 class="form-section__title">Personal Info</h3>
+        <div class="form-row">
+          <input type="text" class="form-input" id="rbName" placeholder="Full name">
+        </div>
+        <div class="form-row form-row-split">
+          <input type="email" class="form-input" id="rbEmail" placeholder="Email">
+          <input type="text" class="form-input" id="rbPhone" placeholder="Phone">
+        </div>
+        <div class="form-row">
+          <input type="text" class="form-input" id="rbLinks" placeholder="LinkedIn / portfolio link (optional)">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section__title">Professional Summary</h3>
+        <div class="form-row">
+          <textarea class="form-input" id="rbSummary" rows="3" placeholder="1-2 sentences on who you are and what you're looking for."></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section__title">Education</h3>
+        <div id="rbEduList"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="rbAddEdu">+ Add Education</button>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section__title">Experience &amp; Projects</h3>
+        <div id="rbExpList"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="rbAddExp">+ Add Experience</button>
+      </div>
+
+      <div class="form-section">
+        <h3 class="form-section__title">Skills</h3>
+        <div class="form-row">
+          <input type="text" class="form-input" id="rbSkills" placeholder="Comma-separated, e.g. Excel, Python, Communication">
+        </div>
+      </div>
+    </div>
+
+    <div class="builder-preview-wrap">
+      <div class="resume-preview" id="resumePreview"></div>
+      <button type="button" class="btn btn-primary" id="rbPrint" style="width:100%;justify-content:center;margin-top:1rem;">Print / Save as PDF</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="improve">
+  <h2 class="block-title">Improve My Resume</h2>
+  <p class="page-sub" style="margin-bottom:2rem;">Paste your resume text below, then take it to the Resume Agent for specific, line-by-line feedback.</p>
+  <div class="sk-form-card" style="max-width:760px;margin:0 auto;">
+    <label for="rbPasteResume" class="sk-label">Your resume text:</label>
+    <textarea class="form-input" id="rbPasteResume" rows="10" placeholder="Paste your resume content here..."></textarea>
+    <div class="improve-actions">
+      <button type="button" class="btn btn-ghost" id="rbCopyResume">Copy Text</button>
+      <a href="chat.html" class="btn btn-primary" id="rbGoToChat">Get AI Feedback &rarr;</a>
+    </div>
+    <p class="form-hint" id="rbCopyHint">Copy your resume above, then paste it into the chat once it opens — the Resume Agent will take it from there.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+      <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="agents.html">AI Team</a></li>
+      <li><a href="learning-hub.html">Learning Hub</a></li>
+      <li><a href="resume-builder.html">Resume Builder</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 JobReady SG — Republic Polytechnic · C240 Final Assessment</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="resume-builder.js"></script>
+</body>
+</html>
