@@ -565,14 +565,30 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
 
 /* ---------- RESUME BUILDER: IMPROVE PATH ---------- */
 .improve-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1.2rem;}
+.rb-feedback-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.6rem;}
+.rb-feedback-list li{position:relative;padding-left:1.4rem;font-size:.88rem;color:var(--text);line-height:1.5;}
+.rb-feedback-list li::before{content:'';position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--green);}
 
-/* ---------- RESUME BUILDER: PRINT ---------- */
+/* ---------- RESUME BUILDER: PRINT ----------
+   Two independently-printable previews now exist (Build From Scratch,
+   and the AI-improved result) - which one is visible during print is
+   toggled via data-print-target on <body>, set right before each
+   respective Print button calls window.print(). */
 @media print{
   html,body{background:#fff !important;}
-  nav.site-nav, .mobile-panel, footer, .hero, .path-grid, #improve, .builder-form, #rbPrint,
+  nav.site-nav, .mobile-panel, footer, .hero, .path-grid,
   .block-title, .page-sub, .page-header { display:none !important; }
-  #build{padding:0;margin:0;background:none;}
-  .builder-grid{display:block;max-width:none;}
+  #build, #improve { display:none !important; }
+
+  body[data-print-target="build"] #build{display:block !important;padding:0;margin:0;background:none;}
+  body[data-print-target="build"] .builder-form, body[data-print-target="build"] #rbPrint{display:none !important;}
+  body[data-print-target="build"] .builder-grid{display:block;max-width:none;}
+
+  body[data-print-target="improve"] #improve{display:block !important;padding:0;margin:0;background:none;}
+  body[data-print-target="improve"] #rbImproveFormCard,
+  body[data-print-target="improve"] #rbFeedbackResult .form-section,
+  body[data-print-target="improve"] #rbPrintImproved { display:none !important; }
+
   .builder-preview-wrap{position:static;}
   .resume-preview{box-shadow:none;border:none;max-height:none;overflow:visible;padding:0;min-height:0;}
 }

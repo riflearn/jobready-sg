@@ -15,6 +15,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css">
+<script type="module">
+  import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.1.200/pdf.min.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.1.200/pdf.worker.min.mjs';
+  window.pdfjsLib = pdfjsLib;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.7.2/mammoth.browser.min.js"></script>
 </head>
 <body data-page="resume">
 
@@ -62,7 +68,7 @@
     <div class="hero-inner">
       <span class="eyebrow"><span class="dot"></span> Resume Builder</span>
       <h1>Build a resume that actually gets <em>read</em>.</h1>
-      <p>Start from scratch with a live preview, or paste what you already have and get it sharpened by the Resume Agent.</p>
+      <p>Start from scratch with a live preview, or upload what you already have and get it sharpened by AI.</p>
       <div class="hero-btns">
         <a href="#build" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -123,7 +129,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
       </div>
       <p class="path-card__title">Improve My Resume</p>
-      <p class="path-card__body">Already have one? Paste it in and take it straight to the Resume Agent for specific, line-by-line feedback.</p>
+      <p class="path-card__body">Already have one? Upload it or paste it in and get instant AI feedback plus an improved version — right here on this page.</p>
     </a>
   </div>
 </section>
@@ -184,16 +190,22 @@
 
 <section class="section" id="improve">
   <h2 class="block-title">Improve My Resume</h2>
-  <p class="page-sub" style="margin-bottom:2rem;">Paste your resume text below, then take it to the Resume Agent for specific, line-by-line feedback.</p>
-  <div class="sk-form-card" style="max-width:760px;margin:0 auto;">
-    <label for="rbPasteResume" class="sk-label">Your resume text:</label>
+  <p class="page-sub" style="margin-bottom:2rem;">Upload your resume or paste it below, then get instant AI feedback and an improved version — no chat needed.</p>
+  <div class="sk-form-card" id="rbImproveFormCard" style="max-width:760px;margin:0 auto;">
+    <label for="rbResumeUpload" class="sk-label">Upload your resume (PDF, DOCX, or TXT):</label>
+    <input type="file" class="form-input" id="rbResumeUpload" accept=".pdf,.docx,.txt" style="padding:.55rem .9rem;">
+    <p class="form-hint" id="rbUploadHint" style="margin-top:.6rem;">Or paste your resume text directly below.</p>
+
+    <label for="rbPasteResume" class="sk-label" style="margin-top:1.2rem;display:block;">Your resume text:</label>
     <textarea class="form-input" id="rbPasteResume" rows="10" placeholder="Paste your resume content here..."></textarea>
     <div class="improve-actions">
       <button type="button" class="btn btn-ghost" id="rbCopyResume">Copy Text</button>
-      <a href="chat.html" class="btn btn-primary" id="rbGoToChat">Get AI Feedback &rarr;</a>
+      <button type="button" class="btn btn-primary" id="rbGetFeedback">Get AI Feedback &rarr;</button>
     </div>
-    <p class="form-hint" id="rbCopyHint">Copy your resume above, then paste it into the chat once it opens — the Resume Agent will take it from there.</p>
+    <p class="form-hint" id="rbCopyHint">Upload or paste your resume, then click "Get AI Feedback" for specific suggestions and an improved version.</p>
   </div>
+
+  <div id="rbFeedbackResult" style="max-width:760px;margin:2rem auto 0;"></div>
 </section>
 
 <footer>
