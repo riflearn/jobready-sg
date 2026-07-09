@@ -135,6 +135,27 @@
   addExpRow();
   renderPreview();
 
+  /* ---------- mobile: floating jump between form and preview ----------
+     On narrow viewports the preview sits below the whole (now long)
+     form, so this button toggles between scrolling down to check the
+     preview and scrolling back up to keep editing - direction is
+     driven by whether the preview is currently on screen. */
+  var previewJumpBtn = document.getElementById('rbPreviewJump');
+  var builderForm = document.querySelector('.builder-form');
+  if (previewJumpBtn && builderForm && 'IntersectionObserver' in window) {
+    var previewInView = false;
+    var jumpObserver = new IntersectionObserver(function (entries) {
+      previewInView = entries[0].isIntersecting;
+      previewJumpBtn.textContent = previewInView ? '↑ Back to Form' : 'View Live Preview ↓';
+    }, { threshold: .2 });
+    jumpObserver.observe(preview);
+
+    previewJumpBtn.addEventListener('click', function () {
+      var target = previewInView ? builderForm : preview;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   var printBtn = document.getElementById('rbPrint');
   if (printBtn) {
     printBtn.addEventListener('click', function () {
@@ -342,6 +363,8 @@
     uploadInput.addEventListener('change', function () {
       var file = uploadInput.files[0];
       if (!file) return;
+      var labelText = document.getElementById('rbFileUploadLabelText');
+      if (labelText) labelText.textContent = file.name;
       uploadHint.textContent = 'Reading ' + file.name + '…';
       extractTextFromFile(file)
         .then(function (text) {

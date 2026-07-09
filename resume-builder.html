@@ -68,7 +68,7 @@
     <div class="hero-inner">
       <span class="eyebrow"><span class="dot"></span> Resume Builder</span>
       <h1>Build a resume that actually gets <em>read</em>.</h1>
-      <p>Start from scratch with a live preview, or upload what you already have and get it sharpened by AI.</p>
+      <p>Start from a template or a blank page with a live preview, or upload what you already have and get it sharpened by AI.</p>
       <div class="hero-btns">
         <a href="#build" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -122,7 +122,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
       </div>
       <p class="path-card__title">Build From Scratch</p>
-      <p class="path-card__body">Fill in your details section by section and watch a clean resume take shape next to you, ready to print or save as PDF.</p>
+      <p class="path-card__body">Start from a template for your field (or an AI-generated one) or a blank page, fill in your details, and watch a clean resume take shape — ready to print or save as PDF.</p>
     </a>
     <a href="#improve" class="path-card">
       <div class="path-card__icon">
@@ -140,7 +140,7 @@
 
   <div class="builder-grid">
     <div class="builder-form">
-      <div class="form-section">
+      <div class="form-section form-section--quickstart">
         <h3 class="form-section__title">Start With a Template (Optional)</h3>
         <p class="form-hint" style="margin-top:0;margin-bottom:1rem;">Pick a starting point below, or just fill in the form yourself — everything stays editable either way.</p>
         <div class="rb-template-grid">
@@ -258,6 +258,7 @@
       <button type="button" class="btn btn-primary" id="rbPrint" style="width:100%;justify-content:center;margin-top:1rem;">Print / Save as PDF</button>
     </div>
   </div>
+  <button type="button" class="rb-preview-jump" id="rbPreviewJump">View Live Preview &darr;</button>
 </section>
 
 <section class="section" id="improve">
@@ -265,7 +266,13 @@
   <p class="page-sub" style="margin-bottom:2rem;">Upload your resume or paste it below, then get instant AI feedback and an improved version — no chat needed.</p>
   <div class="sk-form-card" id="rbImproveFormCard" style="max-width:760px;margin:0 auto;">
     <label for="rbResumeUpload" class="sk-label">Upload your resume (PDF, DOCX, or TXT):</label>
-    <input type="file" class="form-input" id="rbResumeUpload" accept=".pdf,.docx,.txt" style="padding:.55rem .9rem;">
+    <div class="rb-file-upload">
+      <input type="file" class="rb-file-upload__input" id="rbResumeUpload" accept=".pdf,.docx,.txt">
+      <label for="rbResumeUpload" class="rb-file-upload__label">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <span id="rbFileUploadLabelText">Choose a file to upload</span>
+      </label>
+    </div>
     <p class="form-hint" id="rbUploadHint" style="margin-top:.6rem;">Or paste your resume text directly below.</p>
 
     <label for="rbPasteResume" class="sk-label" style="margin-top:1.2rem;display:block;">Your resume text:</label>
@@ -274,7 +281,7 @@
       <button type="button" class="btn btn-ghost" id="rbCopyResume">Copy Text</button>
       <button type="button" class="btn btn-primary" id="rbGetFeedback">Get AI Feedback &rarr;</button>
     </div>
-    <p class="form-hint" id="rbCopyHint">Upload or paste your resume, then click "Get AI Feedback" for specific suggestions and an improved version.</p>
+    <p class="form-hint" id="rbCopyHint">Click "Get AI Feedback" for suggestions and an improved version, or "Copy Text" to copy your resume elsewhere — like a job application form.</p>
   </div>
 
   <div id="rbFeedbackResult" style="max-width:760px;margin:2rem auto 0;"></div>
