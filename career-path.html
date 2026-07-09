@@ -191,7 +191,7 @@
   var roles = splitList(data.careerRoles);
 
   var journeySteps = roles.map(function (r, i) {
-    var jobsUrl = 'https://www.mycareersfuture.gov.sg/search?search=' + encodeURIComponent(r) + '&sortBy=relevancy&page=0';
+    var jobsUrl = 'https://www.mycareersfuture.gov.sg/search?search=' + encodeURIComponent(r) + '&sortBy=relevancy&page=0&positionLevel=Fresh%2Fentry+level';
     return '<div class="pathway-jstep"><div class="pathway-jstep-num">' + (i + 1) + '</div>' +
       '<div class="pathway-jstep-title">' + escapeHtml(r) + '</div>' +
       '<div class="pathway-jstep-salary" id="pwSalary' + i + '"></div>' +
