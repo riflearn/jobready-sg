@@ -563,6 +563,16 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
 .rp-skills{display:flex;flex-wrap:wrap;gap:.5rem;}
 .rp-skill{background:rgba(31,122,83,.12);color:#1F7A53;font-size:.78rem;font-weight:600;padding:.3rem .7rem;border-radius:100px;}
 
+/* ---------- RESUME BUILDER: TEMPLATE PICKER ---------- */
+.rb-template-grid{display:flex;flex-wrap:wrap;gap:.6rem;}
+.rb-template-btn{
+  background:var(--bg-alt);border:1px solid var(--border);border-radius:100px;color:var(--text);
+  font-family:var(--font-body);font-size:.82rem;font-weight:600;padding:.5rem 1rem;cursor:pointer;
+  transition:border-color .2s ease,background .2s ease,color .2s ease;
+}
+.rb-template-btn:hover{border-color:var(--green);color:var(--green);}
+.rb-template-btn.is-active{background:var(--green);border-color:var(--green);color:#fff;}
+
 /* ---------- RESUME BUILDER: IMPROVE PATH ---------- */
 .improve-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1.2rem;}
 .rb-feedback-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.6rem;}
