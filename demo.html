@@ -53,25 +53,26 @@
   <a href="about.html" data-page="about">About</a>
   <div id="authAreaMobile" class="auth-area-mobile"></div>
 </div>
+<nav class="tabbar" id="mobileTabbar">
+  <a href="index.html" data-page="home" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span>Home</span>
+  </a>
+  <a href="resume-builder.html" data-page="resume" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+    <span>Resume</span>
+  </a>
+  <a href="learning-hub.html" data-page="hub" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+    <span>Hub</span>
+  </a>
+</nav>
 
 <div class="page-header">
   <div class="eyebrow-sm">See It In Action</div>
   <h1 class="page-title">Watch how JobReady SG works</h1>
-  <p class="page-sub">A recorded walkthrough, a sample conversation, and a look at the multi-agent pipeline behind every reply.</p>
+  <p class="page-sub">A sample conversation, and a look at the multi-agent pipeline behind every reply.</p>
 </div>
-
-<!-- VIDEO -->
-<section class="section section-tight">
-  <h2 class="block-title">Demo video</h2>
-  <div class="video-shell">
-    <div class="video-frame">
-      <button class="play-btn" aria-label="Play demo video">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
-      </button>
-    </div>
-    <div class="video-caption">Placeholder — replace this frame with your recorded walkthrough (embed a file or YouTube link here).</div>
-  </div>
-</section>
 
 <!-- EXAMPLE CONVERSATION -->
 <section class="section section-alt">
@@ -94,7 +95,7 @@
       <div class="arch-connector" data-c="1"></div>
       <div class="arch-node" data-n="2">BOTPRESS</div>
       <div class="arch-connector" data-c="2"></div>
-      <div class="arch-node" data-n="3">SUPERVISOR AGENT (Gemini)</div>
+      <div class="arch-node" data-n="3">SUPERVISOR AGENT (OpenRouter)</div>
       <div class="arch-connector" data-c="3"></div>
       <div class="arch-branch">
         <div class="arch-node" data-n="4a">RESUME AGENT</div>
@@ -102,7 +103,7 @@
         <div class="arch-node" data-n="4c">INDUSTRY AGENT</div>
       </div>
       <div class="arch-connector" data-c="4"></div>
-      <div class="arch-node" data-n="5">GEMINI + NOTEBOOKLM (RAG)</div>
+      <div class="arch-node" data-n="5">GOOGLE SHEETS (RAG)</div>
       <div class="arch-connector" data-c="5"></div>
       <div class="arch-node" data-n="6">RESPONSE</div>
     </div>

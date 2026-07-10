@@ -59,6 +59,20 @@
   <a href="about.html" data-page="about">About</a>
   <div id="authAreaMobile" class="auth-area-mobile"></div>
 </div>
+<nav class="tabbar" id="mobileTabbar">
+  <a href="index.html" data-page="home" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span>Home</span>
+  </a>
+  <a href="resume-builder.html" data-page="resume" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+    <span>Resume</span>
+  </a>
+  <a href="learning-hub.html" data-page="hub" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+    <span>Hub</span>
+  </a>
+</nav>
 
 <section class="hero">
   <div class="hero-bg"></div>
@@ -106,16 +120,16 @@
   </div>
 </section>
 
-<section class="section section-tight">
+<section class="section section-tight" id="pathChoice">
   <div class="path-grid">
-    <a href="#build" class="path-card">
+    <a href="#build" class="path-card" data-path="build">
       <div class="path-card__icon">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
       </div>
       <p class="path-card__title">Build From Scratch</p>
       <p class="path-card__body">Start from a template for your field (or an AI-generated one) or a blank page, fill in your details, and watch a clean resume take shape — ready to print or save as PDF.</p>
     </a>
-    <a href="#improve" class="path-card">
+    <a href="#improve" class="path-card" data-path="improve">
       <div class="path-card__icon">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
       </div>
@@ -125,122 +139,148 @@
   </div>
 </section>
 
-<section class="section section-alt" id="build">
+<section class="section section-alt" id="build" hidden>
+  <button type="button" class="rb-path-back" data-back-to-paths>&larr; Choose a different path</button>
   <h2 class="block-title">Build From Scratch</h2>
-  <p class="page-sub" style="margin-bottom:2rem;">Fill in what you have — the preview updates as you type. Nothing here is saved or sent anywhere; it stays on this page.</p>
+  <p class="page-sub" style="margin-bottom:1.5rem;">Fill in what you have — the preview updates as you type. Nothing here is saved or sent anywhere; it stays on this page.</p>
+
+  <div class="rb-progress">
+    <div class="rb-progress__label">Step <span id="rbStepNum">1</span> of 5</div>
+    <div class="rb-progress__track"><div class="rb-progress__fill" id="rbProgressFill"></div></div>
+  </div>
 
   <div class="builder-grid">
     <div class="builder-form">
-      <div class="form-section form-section--quickstart">
-        <h3 class="form-section__title">Start With a Template (Optional)</h3>
-        <p class="form-hint" style="margin-top:0;margin-bottom:1rem;">Pick a starting point below, or just fill in the form yourself — everything stays editable either way.</p>
-        <div class="rb-template-grid">
-          <button type="button" class="rb-template-btn" data-template="applied_science">Applied Science</button>
-          <button type="button" class="rb-template-btn" data-template="business">Business</button>
-          <button type="button" class="rb-template-btn" data-template="engineering">Engineering</button>
-          <button type="button" class="rb-template-btn" data-template="hospitality">Hospitality</button>
-          <button type="button" class="rb-template-btn" data-template="infocomm">Infocomm</button>
-          <button type="button" class="rb-template-btn" data-template="sports_health">Sports &amp; Health</button>
-          <button type="button" class="rb-template-btn" data-template="design">Tech for Arts &amp; Design</button>
+      <div class="rb-step is-active" data-step="1">
+        <div class="form-section form-section--quickstart">
+          <h3 class="form-section__title">Start With a Template (Optional)</h3>
+          <p class="form-hint" style="margin-top:0;margin-bottom:1rem;">Pick a starting point below, or just fill in the form yourself — everything stays editable either way.</p>
+          <div class="rb-template-grid">
+            <button type="button" class="rb-template-btn" data-template="applied_science">Applied Science</button>
+            <button type="button" class="rb-template-btn" data-template="business">Business</button>
+            <button type="button" class="rb-template-btn" data-template="engineering">Engineering</button>
+            <button type="button" class="rb-template-btn" data-template="hospitality">Hospitality</button>
+            <button type="button" class="rb-template-btn" data-template="infocomm">Infocomm</button>
+            <button type="button" class="rb-template-btn" data-template="sports_health">Sports &amp; Health</button>
+            <button type="button" class="rb-template-btn" data-template="design">Tech for Arts &amp; Design</button>
+          </div>
+          <div class="form-row" style="margin-top:1.2rem;">
+            <label for="rbAiTemplateDiploma" class="sk-label" style="font-size:.8rem;">Or generate one for your exact diploma:</label>
+            <select class="form-input sk-select" id="rbAiTemplateDiploma">
+              <option value="">-- Choose your diploma --</option>
+              <optgroup label="School of Applied Science">
+                <option value="Diploma in Applied Chemistry">Diploma in Applied Chemistry</option>
+                <option value="Diploma in Biological Sciences">Diploma in Biological Sciences</option>
+                <option value="Diploma in Biomedical Science">Diploma in Biomedical Science</option>
+                <option value="Diploma in Environmental & Marine Science">Diploma in Environmental & Marine Science</option>
+                <option value="Diploma in Pharmaceutical Science">Diploma in Pharmaceutical Science</option>
+              </optgroup>
+              <optgroup label="School of Business">
+                <option value="Diploma in Business">Diploma in Business</option>
+                <option value="Diploma in Consumer Insights & Psychology">Diploma in Consumer Insights & Psychology</option>
+                <option value="Diploma in Defence & Security Management">Diploma in Defence & Security Management</option>
+                <option value="Diploma in Human Resource Management with Psychology">Diploma in Human Resource Management with Psychology</option>
+                <option value="Diploma in Mass Communication">Diploma in Mass Communication</option>
+              </optgroup>
+              <optgroup label="School of Engineering">
+                <option value="Diploma in Aerospace Engineering">Diploma in Aerospace Engineering</option>
+                <option value="Diploma in Aviation Management">Diploma in Aviation Management</option>
+                <option value="Diploma in Business Process & Engineering Management">Diploma in Business Process & Engineering Management</option>
+                <option value="Diploma in Electrical & Electronic Engineering">Diploma in Electrical & Electronic Engineering</option>
+                <option value="Diploma in Engineering">Diploma in Engineering</option>
+                <option value="Diploma in Mobility & Robotic Systems">Diploma in Mobility & Robotic Systems</option>
+                <option value="Diploma in Supply Chain Management">Diploma in Supply Chain Management</option>
+                <option value="Diploma in Sustainable Built Environment">Diploma in Sustainable Built Environment</option>
+              </optgroup>
+              <optgroup label="School of Hospitality">
+                <option value="Diploma in Hospitality & Tourism Management">Diploma in Hospitality & Tourism Management</option>
+                <option value="Diploma in Hotel & Leisure Management">Diploma in Hotel & Leisure Management</option>
+                <option value="Diploma in Events & Project Management">Diploma in Events & Project Management</option>
+                <option value="Diploma in Restaurant & Culinary Management">Diploma in Restaurant & Culinary Management</option>
+              </optgroup>
+              <optgroup label="School of Infocomm">
+                <option value="Diploma in Applied AI & Analytics">Diploma in Applied AI & Analytics</option>
+                <option value="Diploma in Cybersecurity & Digital Forensics">Diploma in Cybersecurity & Digital Forensics</option>
+                <option value="Diploma in Enterprise Cloud Computing & Management">Diploma in Enterprise Cloud Computing & Management</option>
+                <option value="Diploma in Financial Technology">Diploma in Financial Technology</option>
+                <option value="Diploma in Information Technology">Diploma in Information Technology</option>
+              </optgroup>
+              <optgroup label="School of Sports and Health">
+                <option value="Diploma in Integrated Community Care">Diploma in Integrated Community Care</option>
+                <option value="Diploma in Outdoor Education">Diploma in Outdoor Education</option>
+                <option value="Diploma in Sport Coaching">Diploma in Sport Coaching</option>
+                <option value="Diploma in Sport & Exercise Science">Diploma in Sport & Exercise Science</option>
+                <option value="Diploma in Sports & Health">Diploma in Sports & Health</option>
+              </optgroup>
+              <optgroup label="School of Technology for Arts, Media and Design">
+                <option value="Diploma in Arts & Entertainment Production Management">Diploma in Arts & Entertainment Production Management</option>
+                <option value="Diploma in Design">Diploma in Design</option>
+                <option value="Diploma in Digital Content Creation">Diploma in Digital Content Creation</option>
+                <option value="Diploma in Sonic Arts">Diploma in Sonic Arts</option>
+              </optgroup>
+            </select>
+            <button type="button" class="btn btn-primary btn-sm" id="rbGenerateTemplate" style="margin-top:.8rem;width:100%;justify-content:center;">Generate with AI &rarr;</button>
+          </div>
+          <p class="form-hint" id="rbTemplateHint"></p>
         </div>
-        <div class="form-row" style="margin-top:1.2rem;">
-          <label for="rbAiTemplateDiploma" class="sk-label" style="font-size:.8rem;">Or generate one for your exact diploma:</label>
-          <select class="form-input sk-select" id="rbAiTemplateDiploma">
-            <option value="">-- Choose your diploma --</option>
-            <optgroup label="School of Applied Science">
-              <option value="Diploma in Applied Chemistry">Diploma in Applied Chemistry</option>
-              <option value="Diploma in Biological Sciences">Diploma in Biological Sciences</option>
-              <option value="Diploma in Biomedical Science">Diploma in Biomedical Science</option>
-              <option value="Diploma in Environmental & Marine Science">Diploma in Environmental & Marine Science</option>
-              <option value="Diploma in Pharmaceutical Science">Diploma in Pharmaceutical Science</option>
-            </optgroup>
-            <optgroup label="School of Business">
-              <option value="Diploma in Business">Diploma in Business</option>
-              <option value="Diploma in Consumer Insights & Psychology">Diploma in Consumer Insights & Psychology</option>
-              <option value="Diploma in Defence & Security Management">Diploma in Defence & Security Management</option>
-              <option value="Diploma in Human Resource Management with Psychology">Diploma in Human Resource Management with Psychology</option>
-              <option value="Diploma in Mass Communication">Diploma in Mass Communication</option>
-            </optgroup>
-            <optgroup label="School of Engineering">
-              <option value="Diploma in Aerospace Engineering">Diploma in Aerospace Engineering</option>
-              <option value="Diploma in Aviation Management">Diploma in Aviation Management</option>
-              <option value="Diploma in Business Process & Engineering Management">Diploma in Business Process & Engineering Management</option>
-              <option value="Diploma in Electrical & Electronic Engineering">Diploma in Electrical & Electronic Engineering</option>
-              <option value="Diploma in Engineering">Diploma in Engineering</option>
-              <option value="Diploma in Mobility & Robotic Systems">Diploma in Mobility & Robotic Systems</option>
-              <option value="Diploma in Supply Chain Management">Diploma in Supply Chain Management</option>
-              <option value="Diploma in Sustainable Built Environment">Diploma in Sustainable Built Environment</option>
-            </optgroup>
-            <optgroup label="School of Hospitality">
-              <option value="Diploma in Hospitality & Tourism Management">Diploma in Hospitality & Tourism Management</option>
-              <option value="Diploma in Hotel & Leisure Management">Diploma in Hotel & Leisure Management</option>
-              <option value="Diploma in Events & Project Management">Diploma in Events & Project Management</option>
-              <option value="Diploma in Restaurant & Culinary Management">Diploma in Restaurant & Culinary Management</option>
-            </optgroup>
-            <optgroup label="School of Infocomm">
-              <option value="Diploma in Applied AI & Analytics">Diploma in Applied AI & Analytics</option>
-              <option value="Diploma in Cybersecurity & Digital Forensics">Diploma in Cybersecurity & Digital Forensics</option>
-              <option value="Diploma in Enterprise Cloud Computing & Management">Diploma in Enterprise Cloud Computing & Management</option>
-              <option value="Diploma in Financial Technology">Diploma in Financial Technology</option>
-              <option value="Diploma in Information Technology">Diploma in Information Technology</option>
-            </optgroup>
-            <optgroup label="School of Sports and Health">
-              <option value="Diploma in Integrated Community Care">Diploma in Integrated Community Care</option>
-              <option value="Diploma in Outdoor Education">Diploma in Outdoor Education</option>
-              <option value="Diploma in Sport Coaching">Diploma in Sport Coaching</option>
-              <option value="Diploma in Sport & Exercise Science">Diploma in Sport & Exercise Science</option>
-              <option value="Diploma in Sports & Health">Diploma in Sports & Health</option>
-            </optgroup>
-            <optgroup label="School of Technology for Arts, Media and Design">
-              <option value="Diploma in Arts & Entertainment Production Management">Diploma in Arts & Entertainment Production Management</option>
-              <option value="Diploma in Design">Diploma in Design</option>
-              <option value="Diploma in Digital Content Creation">Diploma in Digital Content Creation</option>
-              <option value="Diploma in Sonic Arts">Diploma in Sonic Arts</option>
-            </optgroup>
-          </select>
-          <button type="button" class="btn btn-primary btn-sm" id="rbGenerateTemplate" style="margin-top:.8rem;width:100%;justify-content:center;">Generate with AI &rarr;</button>
+
+        <div class="form-section">
+          <h3 class="form-section__title">Personal Info</h3>
+          <div class="form-row">
+            <input type="text" class="form-input" id="rbName" placeholder="Full name" autocomplete="name">
+          </div>
+          <div class="form-row form-row-split">
+            <input type="email" class="form-input" id="rbEmail" placeholder="Email" inputmode="email" autocomplete="email">
+            <input type="tel" class="form-input" id="rbPhone" placeholder="Phone" inputmode="tel" autocomplete="tel">
+          </div>
+          <div class="form-row">
+            <input type="url" class="form-input" id="rbLinks" placeholder="LinkedIn / portfolio link (optional)" inputmode="url">
+          </div>
         </div>
-        <p class="form-hint" id="rbTemplateHint"></p>
+
+        <div class="form-section">
+          <h3 class="form-section__title">Professional Summary</h3>
+          <div class="form-row">
+            <textarea class="form-input" id="rbSummary" rows="3" placeholder="1-2 sentences on who you are and what you're looking for."></textarea>
+          </div>
+        </div>
       </div>
 
-      <div class="form-section">
-        <h3 class="form-section__title">Personal Info</h3>
-        <div class="form-row">
-          <input type="text" class="form-input" id="rbName" placeholder="Full name">
-        </div>
-        <div class="form-row form-row-split">
-          <input type="email" class="form-input" id="rbEmail" placeholder="Email">
-          <input type="text" class="form-input" id="rbPhone" placeholder="Phone">
-        </div>
-        <div class="form-row">
-          <input type="text" class="form-input" id="rbLinks" placeholder="LinkedIn / portfolio link (optional)">
+      <div class="rb-step" data-step="2">
+        <div class="form-section">
+          <h3 class="form-section__title">Education</h3>
+          <div id="rbEduList"></div>
+          <button type="button" class="btn btn-ghost btn-sm" id="rbAddEdu">+ Add Education</button>
         </div>
       </div>
 
-      <div class="form-section">
-        <h3 class="form-section__title">Professional Summary</h3>
-        <div class="form-row">
-          <textarea class="form-input" id="rbSummary" rows="3" placeholder="1-2 sentences on who you are and what you're looking for."></textarea>
+      <div class="rb-step" data-step="3">
+        <div class="form-section">
+          <h3 class="form-section__title">Experience &amp; Projects</h3>
+          <div id="rbExpList"></div>
+          <button type="button" class="btn btn-ghost btn-sm" id="rbAddExp">+ Add Experience</button>
         </div>
       </div>
 
-      <div class="form-section">
-        <h3 class="form-section__title">Education</h3>
-        <div id="rbEduList"></div>
-        <button type="button" class="btn btn-ghost btn-sm" id="rbAddEdu">+ Add Education</button>
-      </div>
-
-      <div class="form-section">
-        <h3 class="form-section__title">Experience &amp; Projects</h3>
-        <div id="rbExpList"></div>
-        <button type="button" class="btn btn-ghost btn-sm" id="rbAddExp">+ Add Experience</button>
-      </div>
-
-      <div class="form-section">
-        <h3 class="form-section__title">Skills</h3>
-        <div class="form-row">
-          <input type="text" class="form-input" id="rbSkills" placeholder="Comma-separated, e.g. Excel, Python, Communication">
+      <div class="rb-step" data-step="4">
+        <div class="form-section">
+          <h3 class="form-section__title">Skills</h3>
+          <div class="form-row">
+            <input type="text" class="form-input" id="rbSkills" placeholder="Comma-separated, e.g. Excel, Python, Communication">
+          </div>
         </div>
+      </div>
+
+      <div class="rb-step" data-step="5">
+        <div class="form-section">
+          <h3 class="form-section__title">Preview</h3>
+          <p class="form-hint" style="margin-top:0;">Here's how your resume looks so far — check it on the right (or below on mobile), then print or save as PDF when you're happy with it. You can still go back and change anything.</p>
+        </div>
+      </div>
+
+      <div class="rb-wizard-nav">
+        <button type="button" class="btn btn-ghost" id="rbStepBack">&larr; Back</button>
+        <button type="button" class="btn btn-primary" id="rbStepContinue">Continue &rarr;</button>
       </div>
     </div>
 
@@ -249,10 +289,10 @@
       <button type="button" class="btn btn-primary" id="rbPrint" style="width:100%;justify-content:center;margin-top:1rem;">Print / Save as PDF</button>
     </div>
   </div>
-  <button type="button" class="rb-preview-jump" id="rbPreviewJump">View Live Preview &darr;</button>
 </section>
 
-<section class="section" id="improve">
+<section class="section" id="improve" hidden>
+  <button type="button" class="rb-path-back" data-back-to-paths>&larr; Choose a different path</button>
   <h2 class="block-title">Improve My Resume</h2>
   <p class="page-sub" style="margin-bottom:2rem;">Upload your resume or paste it below, then get instant AI feedback and an improved version — no chat needed.</p>
   <div class="sk-form-card" id="rbImproveFormCard" style="max-width:760px;margin:0 auto;">

@@ -135,26 +135,78 @@
   addExpRow();
   renderPreview();
 
-  /* ---------- mobile: floating jump between form and preview ----------
-     On narrow viewports the preview sits below the whole (now long)
-     form, so this button toggles between scrolling down to check the
-     preview and scrolling back up to keep editing - direction is
-     driven by whether the preview is currently on screen. */
-  var previewJumpBtn = document.getElementById('rbPreviewJump');
-  var builderForm = document.querySelector('.builder-form');
-  if (previewJumpBtn && builderForm && 'IntersectionObserver' in window) {
-    var previewInView = false;
-    var jumpObserver = new IntersectionObserver(function (entries) {
-      previewInView = entries[0].isIntersecting;
-      previewJumpBtn.textContent = previewInView ? '↑ Back to Form' : 'View Live Preview ↓';
-    }, { threshold: .2 });
-    jumpObserver.observe(preview);
+  /* ---------- path selector: gate Build From Scratch vs Improve My Resume ----------
+     Only one path renders at a time. Switching paths doesn't clear
+     whatever was already typed in either one - just toggles visibility,
+     so going back and forth doesn't lose work. */
+  var pathChoice = document.getElementById('pathChoice');
+  var buildSection = document.getElementById('build');
+  var improveSection = document.getElementById('improve');
 
-    previewJumpBtn.addEventListener('click', function () {
-      var target = previewInView ? builderForm : preview;
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+  function showPath(which) {
+    if (pathChoice) pathChoice.hidden = true;
+    if (buildSection) buildSection.hidden = which !== 'build';
+    if (improveSection) improveSection.hidden = which !== 'improve';
+    var target = which === 'build' ? buildSection : improveSection;
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  function showPathChoice() {
+    if (pathChoice) pathChoice.hidden = false;
+    if (buildSection) buildSection.hidden = true;
+    if (improveSection) improveSection.hidden = true;
+    if (pathChoice) pathChoice.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.querySelectorAll('.path-card').forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      e.preventDefault();
+      showPath(card.getAttribute('data-path') === 'improve' ? 'improve' : 'build');
+    });
+  });
+
+  document.querySelectorAll('[data-back-to-paths]').forEach(function (btn) {
+    btn.addEventListener('click', showPathChoice);
+  });
+
+  /* ---------- Build From Scratch: step wizard ----------
+     Personal Info -> Education -> Experience -> Skills -> Preview.
+     Steps are shown/hidden via the .is-active class; the wizard nav
+     buttons are the same markup on desktop and mobile, CSS repositions
+     them into a sticky bottom bar on narrow viewports. Reaching the
+     final step scrolls to the live preview instead of showing a 6th
+     form step, since the preview panel already exists as its own
+     element (.builder-preview-wrap). */
+  var TOTAL_STEPS = 5;
+  var currentStep = 1;
+  var stepEls = document.querySelectorAll('.rb-step');
+  var stepNumEl = document.getElementById('rbStepNum');
+  var progressFill = document.getElementById('rbProgressFill');
+  var stepBackBtn = document.getElementById('rbStepBack');
+  var stepContinueBtn = document.getElementById('rbStepContinue');
+  var builderFormEl = document.querySelector('.builder-form');
+  var previewWrap = document.querySelector('.builder-preview-wrap');
+
+  function showStep(n) {
+    currentStep = n;
+    stepEls.forEach(function (el) {
+      el.classList.toggle('is-active', parseInt(el.getAttribute('data-step'), 10) === n);
+    });
+    if (stepNumEl) stepNumEl.textContent = n;
+    if (progressFill) progressFill.style.width = (n / TOTAL_STEPS * 100) + '%';
+    if (stepBackBtn) stepBackBtn.hidden = n === 1;
+    if (stepContinueBtn) stepContinueBtn.hidden = n === TOTAL_STEPS;
+    var scrollTarget = (n === TOTAL_STEPS && previewWrap) ? previewWrap : builderFormEl;
+    if (scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  if (stepBackBtn) {
+    stepBackBtn.addEventListener('click', function () { if (currentStep > 1) showStep(currentStep - 1); });
+  }
+  if (stepContinueBtn) {
+    stepContinueBtn.addEventListener('click', function () { if (currentStep < TOTAL_STEPS) showStep(currentStep + 1); });
+  }
+  if (stepEls.length) showStep(1);
 
   var printBtn = document.getElementById('rbPrint');
   if (printBtn) {
@@ -439,6 +491,7 @@
       }
 
       feedbackResult.innerHTML =
+        '<p class="form-hint" style="margin-top:0;margin-bottom:.8rem;">Reading your resume and preparing feedback…</p>' +
         '<div class="skeleton" style="height:20px;width:60%;margin-bottom:10px;"></div>' +
         '<div class="skeleton" style="height:200px;"></div>';
 

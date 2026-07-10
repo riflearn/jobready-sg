@@ -54,6 +54,20 @@
   <a href="about.html" data-page="about">About</a>
   <div id="authAreaMobile" class="auth-area-mobile"></div>
 </div>
+<nav class="tabbar" id="mobileTabbar">
+  <a href="index.html" data-page="home" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span>Home</span>
+  </a>
+  <a href="resume-builder.html" data-page="resume" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+    <span>Resume</span>
+  </a>
+  <a href="learning-hub.html" data-page="hub" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+    <span>Hub</span>
+  </a>
+</nav>
 
 <div class="page-header">
   <div class="eyebrow-sm">Get Started</div>
@@ -74,14 +88,22 @@
 
     <form id="signupForm">
       <div class="form-row">
-        <input type="text" class="form-input" id="signupName" placeholder="Full name" required>
+        <label for="signupName" class="sk-label">Full name</label>
+        <input type="text" class="form-input" id="signupName" placeholder="Full name" autocomplete="name" required>
       </div>
       <div class="form-row">
-        <input type="email" class="form-input" id="signupEmail" placeholder="Email (Gmail, Outlook, Yahoo — any provider)" required>
+        <label for="signupEmail" class="sk-label">Email</label>
+        <input type="email" class="form-input" id="signupEmail" placeholder="Gmail, Outlook, Yahoo — any provider" inputmode="email" autocomplete="email" required>
       </div>
       <div class="form-row form-row-split">
-        <input type="password" class="form-input" id="signupPassword" placeholder="Password" required>
-        <input type="password" class="form-input" id="signupPasswordConfirm" placeholder="Confirm password" required>
+        <div>
+          <label for="signupPassword" class="sk-label">Password</label>
+          <input type="password" class="form-input" id="signupPassword" placeholder="Password" autocomplete="new-password" required>
+        </div>
+        <div>
+          <label for="signupPasswordConfirm" class="sk-label">Confirm password</label>
+          <input type="password" class="form-input" id="signupPasswordConfirm" placeholder="Confirm password" autocomplete="new-password" required>
+        </div>
       </div>
       <p class="form-hint" style="margin-top:0;margin-bottom:1rem;">Password must be at least 8 characters.</p>
       <button class="btn btn-primary" type="submit" id="signupSubmitBtn" style="width:100%;justify-content:center;margin-top:.6rem;">

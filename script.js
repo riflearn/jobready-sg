@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- highlight the active nav link ---------- */
   const page = document.body.dataset.page;
-  document.querySelectorAll('.nav-links a, .mobile-panel a').forEach(link => {
+  document.querySelectorAll('.nav-links a, .mobile-panel a, .tabbar a').forEach(link => {
     if (link.dataset.page === page) link.classList.add('active');
   });
 
