@@ -208,11 +208,127 @@
   }
   if (stepEls.length) showStep(1);
 
+  /* ---------- download the resume as a real, text-based PDF ----------
+     Built directly from the same structured data object that drives the
+     live preview (getFormData() / normalizeImprovedResume()) - not a
+     screenshot of the DOM. That matters: rendering via html2canvas would
+     rasterize the page into an image, producing a PDF with no selectable
+     text at all (unreadable by copy-paste or by an ATS resume parser).
+     Drawing real text with jsPDF avoids that, and also means page chrome
+     (logo, wizard nav, progress bar) can never leak in, since none of
+     that exists in the plain data object being read from. */
+  function buildResumePdf(data, filenameBase) {
+    if (typeof jspdf === 'undefined' || !jspdf.jsPDF) return;
+    var doc = new jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+    var pageWidth = doc.internal.pageSize.getWidth();
+    var pageHeight = doc.internal.pageSize.getHeight();
+    var marginX = 18;
+    var marginBottom = 18;
+    var maxWidth = pageWidth - marginX * 2;
+    var y = 20;
+
+    function ensureSpace(neededHeight) {
+      if (y + neededHeight > pageHeight - marginBottom) {
+        doc.addPage();
+        y = 20;
+      }
+    }
+
+    function addWrapped(text, fontSize, style, lineHeight, color) {
+      doc.setFont('helvetica', style || 'normal');
+      doc.setFontSize(fontSize);
+      doc.setTextColor(color || '#1C2B45');
+      doc.splitTextToSize(text, maxWidth).forEach(function (line) {
+        ensureSpace(lineHeight);
+        doc.text(line, marginX, y);
+        y += lineHeight;
+      });
+    }
+
+    function addSectionTitle(title) {
+      y += 3;
+      ensureSpace(9);
+      doc.setDrawColor(211, 220, 213);
+      doc.setLineWidth(0.3);
+      doc.line(marginX, y, pageWidth - marginX, y);
+      y += 5;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor('#1C2B45');
+      doc.text(title.toUpperCase(), marginX, y);
+      y += 6;
+    }
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor('#1C2B45');
+    doc.text(data.name || 'Your Name', marginX, y);
+    y += 8;
+
+    var contactParts = [data.email, data.phone, data.links].filter(Boolean);
+    if (contactParts.length) {
+      addWrapped(contactParts.join('   |   '), 10, 'normal', 5, '#4A5A72');
+      y += 2;
+    }
+
+    if (data.summary) {
+      addSectionTitle('Summary');
+      addWrapped(data.summary, 10.5, 'normal', 5.2, '#1C2B45');
+    }
+
+    var education = (data.education || []).filter(function (e) { return e.school || e.course; });
+    if (education.length) {
+      addSectionTitle('Education');
+      education.forEach(function (e) {
+        ensureSpace(6);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        doc.setTextColor('#1C2B45');
+        doc.text(e.course || 'Course', marginX, y);
+        if (e.year) {
+          doc.setFont('helvetica', 'normal');
+          doc.text(e.year, pageWidth - marginX, y, { align: 'right' });
+        }
+        y += 5;
+        if (e.school) addWrapped(e.school, 9.5, 'normal', 4.8, '#4A5A72');
+        y += 2;
+      });
+    }
+
+    var experience = (data.experience || []).filter(function (e) { return e.role || e.org; });
+    if (experience.length) {
+      addSectionTitle('Experience & Projects');
+      experience.forEach(function (e) {
+        ensureSpace(6);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        doc.setTextColor('#1C2B45');
+        doc.text(e.role || 'Role', marginX, y);
+        if (e.dates) {
+          doc.setFont('helvetica', 'normal');
+          doc.text(e.dates, pageWidth - marginX, y, { align: 'right' });
+        }
+        y += 5;
+        if (e.org) addWrapped(e.org, 9.5, 'normal', 4.8, '#4A5A72');
+        if (e.desc) addWrapped(e.desc, 9.5, 'normal', 4.8, '#1C2B45');
+        y += 2;
+      });
+    }
+
+    if (data.skills && data.skills.length) {
+      addSectionTitle('Skills');
+      addWrapped(data.skills.join('  •  '), 10, 'normal', 5, '#1C2B45');
+    }
+
+    var safeName = (filenameBase || 'resume').trim().replace(/[^a-z0-9\-_ ]+/gi, '').trim().replace(/\s+/g, '-') || 'resume';
+    doc.save(safeName + '.pdf');
+  }
+
   var printBtn = document.getElementById('rbPrint');
   if (printBtn) {
     printBtn.addEventListener('click', function () {
-      document.body.setAttribute('data-print-target', 'build');
-      window.print();
+      var data = getFormData();
+      buildResumePdf(data, data.name || 'resume');
     });
   }
 
@@ -471,14 +587,14 @@
       '</div>' +
       '<div class="builder-preview-wrap" style="margin-top:1.5rem;">' +
         '<div class="resume-preview" id="rbImprovedPreview"></div>' +
-        '<button type="button" class="btn btn-primary" id="rbPrintImproved" style="width:100%;justify-content:center;margin-top:1rem;">Print / Save as PDF</button>' +
+        '<button type="button" class="btn btn-primary" id="rbPrintImproved" style="width:100%;justify-content:center;margin-top:1rem;">Download as PDF</button>' +
       '</div>';
 
-    renderPreviewFromData(normalizeImprovedResume(data.improvedResume), document.getElementById('rbImprovedPreview'));
+    var improvedResumeData = normalizeImprovedResume(data.improvedResume);
+    renderPreviewFromData(improvedResumeData, document.getElementById('rbImprovedPreview'));
 
     document.getElementById('rbPrintImproved').addEventListener('click', function () {
-      document.body.setAttribute('data-print-target', 'improve');
-      window.print();
+      buildResumePdf(improvedResumeData, improvedResumeData.name || 'resume');
     });
   }
 
