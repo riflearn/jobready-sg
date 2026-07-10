@@ -475,6 +475,55 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
 .profile-body{font-size:.95rem;color:var(--text);line-height:1.7;}
 .profile-body--empty{color:var(--muted-2);font-style:italic;}
 
+/* ---------- COMPANY QUIZ ---------- */
+.quiz-shell{display:flex;flex-direction:column;gap:1rem;}
+.quiz-question{background:var(--bg-alt);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.2rem;}
+.quiz-question__num{font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:.55rem;}
+.quiz-question h3{font-size:1rem;margin:0 0 .9rem;color:var(--text);line-height:1.6;}
+.quiz-options{display:grid;gap:.65rem;}
+.quiz-option{display:flex;align-items:flex-start;gap:.7rem;padding:.75rem .85rem;border:1px solid var(--border);border-radius:12px;background:var(--card);cursor:pointer;transition:border-color .18s ease,background .18s ease;}
+.quiz-option:hover{border-color:var(--green);background:var(--green-soft);}
+.quiz-option input{margin-top:.18rem;accent-color:var(--green);}
+.quiz-option span{font-size:.92rem;line-height:1.5;color:var(--text);}
+.quiz-status{font-size:.9rem;color:var(--muted);min-height:1.25rem;}
+.quiz-status--error{color:var(--red);}
+.quiz-actions{display:flex;justify-content:flex-start;margin-top:.2rem;}
+.quiz-intro{font-size:.95rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;}
+.quiz-result-card{max-width:560px;margin:2rem auto;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2rem;box-shadow:var(--shadow);}
+.quiz-result-pill{display:inline-flex;align-items:center;justify-content:center;padding:.4rem .8rem;border-radius:100px;background:var(--green-soft);color:var(--green);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;}
+.quiz-result-card h2{margin:.4rem 0 .7rem;font-size:1.6rem;color:var(--text);}
+.quiz-result-card p{color:var(--muted);line-height:1.7;margin-bottom:1.2rem;}
+
+/* ---------- MOCK INTERVIEW ---------- */
+.interview-shell{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:1.2rem;}
+.interviewer-panel{display:flex;gap:1rem;align-items:center;padding:1.1rem;border-radius:20px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);}
+.interviewer-avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff;background:var(--green);}
+.interviewer-details{display:flex;flex-direction:column;gap:.35rem;}
+.interviewer-name{font-size:1rem;font-weight:700;color:var(--text);}
+.interviewer-role{font-size:.9rem;color:var(--muted);}
+.interviewer-notes{font-size:.85rem;color:var(--muted);max-width:640px;line-height:1.5;}
+.interview-status{font-size:.95rem;font-weight:600;color:var(--text);padding:.95rem 1rem;border-radius:14px;background:var(--card);border:1px solid var(--border);}
+.interview-history{display:flex;flex-direction:column;gap:.85rem;max-height:520px;overflow-y:auto;padding-right:.5rem;}
+.interview-message{display:flex;}
+.interview-message--user{justify-content:flex-end;}
+.interview-message--ai{justify-content:flex-start;}
+.interview-message__bubble{max-width:80%;padding:1rem 1.1rem;border-radius:18px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);}
+.interview-message--user .interview-message__bubble{background:var(--green-soft);border-color:transparent;}
+.interview-caption{padding:1rem 1.1rem;border-radius:16px;background:var(--bg-alt);border:1px solid var(--border);color:var(--text);min-height:3rem;line-height:1.6;}
+.interview-controls{display:grid;gap:.9rem;}
+.interview-input-row{display:flex;gap:.75rem;align-items:center;}
+.interview-text-input{flex:1;border:1px solid var(--border);border-radius:14px;padding:.95rem 1rem;background:var(--card);color:var(--text);font-size:.95rem;}
+.interview-text-input:disabled{opacity:.7;}
+.btn-mic{width:52px;height:52px;border-radius:14px;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;}
+.btn-mic.active{background:var(--green);color:#fff;border-color:var(--green);}
+.interview-summary{margin-top:1rem;}
+.interview-summary-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.6rem;box-shadow:var(--shadow);}
+.interview-summary-card h2{margin-top:0;font-size:1.35rem;color:var(--text);}
+.interview-summary-row{margin-top:1rem;}
+.interview-summary-row strong{display:block;font-size:.95rem;margin-bottom:.35rem;color:var(--text);}
+.interview-summary-row span{display:inline-block;font-size:1.65rem;font-weight:700;color:var(--green);}
+.interview-summary-row p{margin:.2rem 0 0;color:var(--muted);line-height:1.7;}
+
 /* ---------- AUTH (nav state + signup/login pages) ---------- */
 .auth-area{display:flex;align-items:center;}
 .auth-login-link{font-size:.88rem;font-weight:600;color:var(--text);text-decoration:none;padding:.5rem .9rem;border-radius:8px;transition:background .2s ease;}

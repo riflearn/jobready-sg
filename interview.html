@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mock Interview — JobReady SG</title>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="hub">
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+    <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="home">Home</a></li>
+    <li><a href="agents.html" data-page="agents">AI Team</a></li>
+    <li><a href="learning-hub.html" data-page="hub">Learning Hub</a></li>
+    <li><a href="resume-builder.html" data-page="resume">Resume Builder</a></li>
+    <li><a href="demo.html" data-page="demo">Demo</a></li>
+    <li><a href="faq.html" data-page="faq">FAQ</a></li>
+    <li><a href="about.html" data-page="about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    <span id="authArea" class="auth-area"></span>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-panel" id="mobilePanel">
+  <a href="index.html" data-page="home">Home</a>
+  <a href="agents.html" data-page="agents">AI Team</a>
+  <a href="learning-hub.html" data-page="hub">Learning Hub</a>
+  <a href="resume-builder.html" data-page="resume">Resume Builder</a>
+  <a href="demo.html" data-page="demo">Demo</a>
+  <a href="faq.html" data-page="faq">FAQ</a>
+  <a href="about.html" data-page="about">About</a>
+  <div id="authAreaMobile" class="auth-area-mobile"></div>
+</div>
+<nav class="tabbar" id="mobileTabbar">
+  <a href="index.html" data-page="home" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span>Home</span>
+  </a>
+  <a href="resume-builder.html" data-page="resume" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+    <span>Resume</span>
+  </a>
+  <a href="learning-hub.html" data-page="hub" class="tabbar__item">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+    <span>Hub</span>
+  </a>
+</nav>
+
+<div class="page-header">
+  <a href="company-quiz.html" class="flow-back">&larr; Back to company quiz</a>
+  <div class="eyebrow-sm">Stage 6</div>
+  <h1 class="page-title" id="interviewTitle">Mock Interview Practice</h1>
+  <p class="page-sub" id="interviewSub">Speak or type your answers, and the coach will respond like a human interviewer.</p>
+</div>
+
+<section class="section section-tight">
+  <div class="interview-shell">
+    <div class="interviewer-panel">
+      <div class="interviewer-avatar">AI</div>
+      <div class="interviewer-details">
+        <div class="interviewer-name">AI Interview Coach</div>
+        <div class="interviewer-role">Human-style interviewer</div>
+        <div class="interviewer-notes">Speaks like a human, hears your response, and asks 5 company-standard follow-up questions. Feedback is provided at the end.</div>
+      </div>
+    </div>
+    <div class="interview-status" id="interviewStatus">Ready to begin</div>
+    <div class="interview-history" id="interviewHistory" aria-live="polite"></div>
+    <div class="interview-caption" id="interviewCaption">Live captions appear here while the coach speaks.</div>
+
+    <div class="interview-controls">
+      <div class="interview-input-row">
+        <input id="textInput" class="interview-text-input" type="text" placeholder="Type your answer here…" aria-label="Type your answer" autocomplete="off">
+        <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+      </div>
+      <button class="btn btn-ghost btn-mic" id="micBtn" type="button" aria-label="Toggle voice input">🎤</button>
+    </div>
+
+    <div class="interview-summary" id="interviewSummary" hidden></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">
+      <img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="agents.html">AI Team</a></li>
+      <li><a href="learning-hub.html">Learning Hub</a></li>
+      <li><a href="resume-builder.html">Resume Builder</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 JobReady SG — Republic Polytechnic · C240 Final Assessment</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+(function () {
+  var CONTEXT_KEY = 'jobready_quiz_data';
+  var SCORE_KEY = 'jobready_quiz_score';
+  var SESSION_KEY = 'jobready_interview_session';
+
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  var recognition = null;
+  var localInterview = null;
+  var isListening = false;
+  var currentState = 'idle';
+
+  var textInput = document.getElementById('textInput');
+  var sendBtn = document.getElementById('sendBtn');
+  var micBtn = document.getElementById('micBtn');
+  var interviewHistory = document.getElementById('interviewHistory');
+  var interviewStatus = document.getElementById('interviewStatus');
+  var interviewCaption = document.getElementById('interviewCaption');
+  var interviewSummary = document.getElementById('interviewSummary');
+
+  var context = getContext();
+  var quizScore = getQuizScore();
+  var session = getSession();
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function getContext() {
+    var raw = sessionStorage.getItem(CONTEXT_KEY);
+    try { return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; }
+  }
+
+  function getQuizScore() {
+    var raw = sessionStorage.getItem(SCORE_KEY);
+    return raw ? String(raw).trim() : '';
+  }
+
+  function getSession() {
+    var raw = sessionStorage.getItem(SESSION_KEY);
+    try {
+      var data = raw ? JSON.parse(raw) : null;
+      if (data && data.sessionId) return data;
+    } catch (e) {}
+    return { sessionId: 'interview-' + Date.now() + '-' + Math.floor(Math.random() * 1000000), exchangeCount: 0 };
+  }
+
+  function saveSession() {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  }
+
+  function getInterviewTerms(expectations) {
+    var raw = String(expectations || '').trim();
+    if (!raw) return ['attention to detail', 'analytical thinking', 'communication', 'teamwork'];
+    var terms = raw.split(/[;,]/).map(function (item) {
+      return item.trim().replace(/\bknowledge\b|\bskills?\b|\bexperience\b/gi, '').trim();
+    }).filter(function (item) {
+      return item;
+    });
+    var unique = [];
+    terms.forEach(function (term) {
+      var lower = term.toLowerCase();
+      if (lower && unique.indexOf(lower) === -1) unique.push(lower);
+    });
+    var fallback = ['attention to detail', 'analytical thinking', 'communication', 'teamwork'];
+    unique = unique.concat(fallback).slice(0, 4);
+    return unique;
+  }
+
+  function buildLocalInterview(company, expectations) {
+    var terms = getInterviewTerms(expectations);
+    var employer = company || 'the company';
+    return {
+      company: employer,
+      expectations: expectations || '',
+      terms: terms,
+      questions: [
+        'Tell me about a time when you demonstrated ' + terms[0] + ' in a team or work setting.',
+        'How would you apply ' + terms[1] + ' in a real workplace situation?',
+        'Why is ' + terms[2] + ' important for a role like this, especially at ' + employer + '?',
+        'If you faced a challenge that required ' + terms[3] + ', what would you do?',
+        'What makes you a strong fit for ' + employer + ' based on your experience with ' + terms[0] + '?'
+      ],
+      answers: [],
+      currentIndex: 0
+    };
+  }
+
+  function scoreLocalAnswer(answer, terms) {
+    var text = String(answer || '').toLowerCase();
+    var matches = terms.reduce(function (count, term) {
+      return count + (term && text.indexOf(term.toLowerCase()) !== -1 ? 1 : 0);
+    }, 0);
+    return Math.min(100, Math.max(20, 50 + matches * 10));
+  }
+
+  function describeAnswerQuality(score) {
+    if (score >= 85) return 'That was a strong and confident answer.';
+    if (score >= 65) return 'That was a good response with solid points.';
+    return 'That answer was a good start, but try to give more specific examples.';
+  }
+
+  function buildLocalSummary() {
+    var total = localInterview.questions.length;
+    var scoreSum = localInterview.answers.reduce(function (sum, item) {
+      return sum + (item.score || 0);
+    }, 0);
+    var average = Math.round(scoreSum / Math.max(total, 1));
+    var strong = localInterview.answers.filter(function (item) { return item.score >= 70; }).length;
+    var weak = localInterview.answers.filter(function (item) { return item.score < 70; }).length;
+    return {
+      INTERVIEW_SCORE: average,
+      strengths: 'You answered ' + strong + ' out of ' + total + ' questions with good clarity and relevance.',
+      areasToImprove: weak > 0
+        ? 'Try to use more concrete examples and directly mention company-relevant terms such as ' + localInterview.terms.join(', ') + ' in your answers.'
+        : 'Your answers were well structured and relevant to the company.',
+      finalFeedback: 'Great work! Keep practicing with real examples and company-specific language for even better interview performance.'
+    };
+  }
+
+  function startLocalInterview() {
+    localInterview = buildLocalInterview(context.company, context.expectations);
+    appendMessage('ai', 'Hi! I am your interview coach. We will do a 5-round mock interview for ' + (context.company || 'this company') + '. ' + localInterview.questions[0]);
+    setState('idle');
+  }
+
+  function processLocalInterviewAnswer(message) {
+    var score = scoreLocalAnswer(message, localInterview.terms);
+    var feedback = describeAnswerQuality(score);
+    localInterview.answers.push({ text: message, score: score });
+
+    var isLast = localInterview.currentIndex >= localInterview.questions.length - 1;
+    var reply = feedback;
+
+    if (isLast) {
+      reply += ' That concludes our mock interview. I will provide your feedback now.';
+      appendMessage('ai', reply);
+      speakText(reply).then(function () {
+        showSummary(buildLocalSummary());
+      });
+      return;
+    }
+
+    localInterview.currentIndex += 1;
+    reply += ' ' + localInterview.questions[localInterview.currentIndex];
+    appendMessage('ai', reply);
+
+    speakText(reply).then(function () {
+      setState('idle');
+    });
+  }
+
+  function renderError(message) {
+    appendMessage('ai', message);
+    setState('idle');
+  }
+
+  function setState(state) {
+    currentState = state;
+    interviewStatus.textContent = {
+      idle: 'Ready to begin your mock interview.',
+      listening: 'Listening… speak now.',
+      thinking: 'Thinking… please wait.',
+      speaking: 'Speaking… listen to the coach.'
+    }[state] || 'Ready to begin your mock interview.';
+
+    var disabled = state !== 'idle';
+    textInput.disabled = disabled;
+    sendBtn.disabled = disabled;
+    if (!SpeechRecognition) micBtn.disabled = disabled || true;
+    if (state === 'speaking' || state === 'thinking') {
+      micBtn.disabled = true;
+    }
+    micBtn.classList.toggle('active', state === 'listening');
+  }
+
+  function appendMessage(role, text) {
+    var container = document.createElement('div');
+    container.className = 'interview-message interview-message--' + role;
+    container.innerHTML = '<div class="interview-message__bubble"><span>' + escapeHtml(text) + '</span></div>';
+    interviewHistory.appendChild(container);
+    interviewHistory.scrollTop = interviewHistory.scrollHeight;
+  }
+
+  function updateCaption(text) {
+    interviewCaption.textContent = text ? text : 'Live captions appear here while the coach speaks.';
+  }
+
+  function showSummary(data) {
+    var score = data.INTERVIEW_SCORE || data.interviewScore || data.score || 'N/A';
+    var strengths = data.strengths || data.strengthsText || data.areasOfStrength || 'No strengths summary provided.';
+    var improvements = data.areasToImprove || data.improvements || data.improvementAreas || 'No improvement areas provided.';
+    var finalNotes = data.finalFeedback || data.feedback || data.summary || '';
+
+    interviewSummary.hidden = false;
+    interviewSummary.innerHTML =
+      '<div class="interview-summary-card">' +
+        '<h2>Interview complete</h2>' +
+        '<div class="interview-summary-row"><strong>Score</strong><span>' + escapeHtml(String(score)) + '%</span></div>' +
+        '<div class="interview-summary-row"><strong>Strengths</strong><p>' + escapeHtml(strengths) + '</p></div>' +
+        '<div class="interview-summary-row"><strong>Areas to improve</strong><p>' + escapeHtml(improvements) + '</p></div>' +
+        (finalNotes ? '<div class="interview-summary-row"><strong>Final note</strong><p>' + escapeHtml(finalNotes) + '</p></div>' : '') +
+      '</div>';
+
+    setState('idle');
+    textInput.disabled = true;
+    sendBtn.disabled = true;
+    micBtn.disabled = true;
+  }
+
+  function renderError(message) {
+    appendMessage('ai', message);
+    setState('idle');
+  }
+
+  function speakText(text) {
+    if (!text || !window.speechSynthesis) return Promise.resolve();
+    return new Promise(function (resolve) {
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.onstart = function () {
+        updateCaption(text);
+        setState('speaking');
+      };
+      utterance.onend = function () {
+        setState('idle');
+        resolve();
+      };
+      utterance.onerror = function () {
+        setState('idle');
+        resolve();
+      };
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+
+  function sendInterviewMessage(message) {
+    message = String(message || '').trim();
+    if (!message || currentState !== 'idle') return;
+
+    appendMessage('user', message);
+    textInput.value = '';
+    setState('thinking');
+    session.exchangeCount += 1;
+    saveSession();
+
+    if (!localInterview) {
+      localInterview = buildLocalInterview(context.company, context.expectations);
+    }
+
+    processLocalInterviewAnswer(message);
+  }
+
+  function toggleListening() {
+    if (!recognition) return;
+    if (isListening) {
+      recognition.stop();
+      return;
+    }
+    recognition.start();
+  }
+
+  function setupRecognition() {
+    if (!SpeechRecognition) return;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.addEventListener('start', function () {
+      isListening = true;
+      setState('listening');
+    });
+
+    recognition.addEventListener('result', function (event) {
+      var transcript = Array.from(event.results)
+        .map(function (result) { return result[0].transcript; })
+        .join('');
+      if (transcript) {
+        sendInterviewMessage(transcript);
+      }
+    });
+
+    recognition.addEventListener('end', function () {
+      isListening = false;
+      if (currentState === 'listening') {
+        setState('idle');
+      }
+    });
+
+    recognition.addEventListener('error', function (event) {
+      console.error('Speech recognition error', event.error);
+      isListening = false;
+      renderError('Speech recognition failed. Please type your answer instead.');
+      setState('idle');
+    });
+  }
+
+  sendBtn.addEventListener('click', function () {
+    sendInterviewMessage(textInput.value.trim());
+  });
+
+  textInput.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendInterviewMessage(textInput.value.trim());
+    }
+  });
+
+  micBtn.addEventListener('click', function () {
+    toggleListening();
+  });
+
+  if (!SpeechRecognition) {
+    micBtn.style.display = 'none';
+  } else {
+    setupRecognition();
+  }
+
+  if (!context.company) {
+    interviewHistory.innerHTML = '<div class="interview-startup">No company context found. Please return to the company quiz first.</div>';
+    setState('idle');
+    textInput.disabled = true;
+    sendBtn.disabled = true;
+    return;
+  }
+
+  startLocalInterview();
+})();
+</script>
+</body>
+</html>
