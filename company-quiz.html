@@ -111,6 +111,81 @@
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
+  function parseCsv(text) {
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+
+    for (var i = 0; i < text.length; i += 1) {
+      var ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') {
+            field += '"';
+            i += 1;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          field += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(field);
+        field = '';
+      } else if (ch === '\r') {
+        continue;
+      } else if (ch === '\n') {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += ch;
+      }
+    }
+
+    if (field !== '' || row.length) {
+      row.push(field);
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  /* ---------- fallback: look up a company's expectations from the local
+     CSV when sessionStorage didn't have them (e.g. arrived via a direct
+     ?company= link, or company-profile.html's own data fetch came back
+     incomplete) - keeps the quiz targeted even when the normal handoff
+     from company-profile.html is missing data. */
+  function loadLocalCompanyExpectations(name) {
+    name = String(name || '').trim();
+    if (!name) return Promise.resolve('');
+
+    return fetch('Companies.csv').then(function (res) {
+      if (!res.ok) throw new Error('Local company data unavailable');
+      return res.text();
+    }).then(function (text) {
+      var csv = parseCsv(text);
+      if (!csv.length) return '';
+      var header = csv[0].map(function (cell) { return String(cell || '').trim(); });
+      var rows = csv.slice(1);
+      for (var i = 0; i < rows.length; i += 1) {
+        var item = rows[i];
+        if (!item || item.length === 0) continue;
+        var rowObj = {};
+        header.forEach(function (key, idx) {
+          rowObj[key] = String(item[idx] || '').trim();
+        });
+        if (rowObj['Company Name'] === name) {
+          return rowObj['Expectations'] || '';
+        }
+      }
+      return '';
+    }).catch(function () { return ''; });
+  }
+
   function getQuizContext() {
     var raw = sessionStorage.getItem(QUIZ_CONTEXT_KEY);
     var parsed = null;
@@ -357,6 +432,7 @@
       if (!answeredAll) {
         statusEl.textContent = 'Please answer all ' + totalQuestions + ' questions before submitting.';
         statusEl.className = 'quiz-status quiz-status--error';
+        statusEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
 
@@ -401,45 +477,61 @@
 
     renderLoading();
 
-    var controller = new AbortController();
-    var timeout = setTimeout(function () { controller.abort(); }, 15000);
+    var expectationsReady = expectations
+      ? Promise.resolve(expectations)
+      : loadLocalCompanyExpectations(companyName);
 
-    fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ company: companyName, expectations: expectations }),
-      signal: controller.signal
-    })
-      .then(function (response) {
-        if (!response.ok) {
-          var httpError = new Error('HTTP response not ok');
-          httpError.status = response.status;
-          httpError.statusText = response.statusText;
-          httpError.response = response;
-          throw httpError;
-        }
-        return response.text();
-      })
-      .then(function (rawText) {
-        clearTimeout(timeout);
-        var cleaned = rawText.replace(/```json|```/g, '').trim();
-        var parsed = null;
-        try { parsed = JSON.parse(cleaned); } catch (e) { parsed = null; }
-        if (!isValidQuestionSet(parsed)) {
-          throw new Error('Malformed payload');
-        }
-        var questions = normalizeQuestions(parsed.questions, companyName, expectations);
-        renderQuiz(questions);
-      })
-      .catch(function (error) {
-        clearTimeout(timeout);
-        console.warn('Quiz webhook failed; falling back to sample quiz.', error);
+    expectationsReady.then(function (resolvedExpectations) {
+      expectations = resolvedExpectations || expectations;
+      if (resolvedExpectations) {
+        // carry the CSV-resolved expectations forward so interview.html
+        // (which reads the same sessionStorage key) benefits too, not
+        // just this page
         try {
-          renderQuiz(sampleQuiz(companyName, expectations).questions);
-        } catch (fallbackError) {
-          handleQuizError(error);
-        }
-      });
+          sessionStorage.setItem(QUIZ_CONTEXT_KEY, JSON.stringify({ company: companyName, expectations: expectations }));
+        } catch (e) {}
+      }
+
+      var controller = new AbortController();
+      var timeout = setTimeout(function () { controller.abort(); }, 15000);
+
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ company: companyName, expectations: expectations }),
+        signal: controller.signal
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            var httpError = new Error('HTTP response not ok');
+            httpError.status = response.status;
+            httpError.statusText = response.statusText;
+            httpError.response = response;
+            throw httpError;
+          }
+          return response.text();
+        })
+        .then(function (rawText) {
+          clearTimeout(timeout);
+          var cleaned = rawText.replace(/```json|```/g, '').trim();
+          var parsed = null;
+          try { parsed = JSON.parse(cleaned); } catch (e) { parsed = null; }
+          if (!isValidQuestionSet(parsed)) {
+            throw new Error('Malformed payload');
+          }
+          var questions = normalizeQuestions(parsed.questions, companyName, expectations);
+          renderQuiz(questions);
+        })
+        .catch(function (error) {
+          clearTimeout(timeout);
+          console.warn('Quiz webhook failed; falling back to sample quiz.', error);
+          try {
+            renderQuiz(sampleQuiz(companyName, expectations).questions);
+          } catch (fallbackError) {
+            handleQuizError(error);
+          }
+        });
+    });
   }
 
   var content = document.getElementById('flowContent');
