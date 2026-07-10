@@ -526,6 +526,27 @@
     return Promise.reject(new Error('Unsupported file type'));
   }
 
+  /* ---------- auto-expand the paste-resume textarea ----------
+     Grows to fit its content instead of staying at a fixed height with
+     a scrollbar / manual drag-handle. Resets height to 0 (not 'auto' -
+     textareas don't reliably shrink-to-fit on 'auto' the way normal
+     elements do) before reading scrollHeight, so it shrinks back down
+     correctly too (e.g. after clearing pasted text), not just grows.
+     Deliberately NOT called at page load: #improve starts hidden behind
+     the path-choice gate, and scrollHeight reads as ~0 on a hidden
+     element, which would bake in a wrong height before the user ever
+     sees it - CSS min-height covers the empty/initial appearance instead,
+     and this only ever runs while the field is genuinely visible. */
+  var pasteResumeEl = document.getElementById('rbPasteResume');
+  function autoExpandTextarea(el) {
+    if (!el) return;
+    el.style.height = '0px';
+    el.style.height = el.scrollHeight + 'px';
+  }
+  if (pasteResumeEl) {
+    pasteResumeEl.addEventListener('input', function () { autoExpandTextarea(pasteResumeEl); });
+  }
+
   var uploadInput = document.getElementById('rbResumeUpload');
   var uploadHint = document.getElementById('rbUploadHint');
   var uploadHintDefault = uploadHint ? uploadHint.textContent : '';
@@ -545,6 +566,7 @@
             return;
           }
           document.getElementById('rbPasteResume').value = text;
+          autoExpandTextarea(pasteResumeEl);
           uploadHint.textContent = 'Extracted text from ' + file.name + '.';
         })
         .catch(function () {

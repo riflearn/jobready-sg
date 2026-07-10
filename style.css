@@ -703,6 +703,10 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
 .rb-template-btn.is-active{background:var(--green);border-color:var(--green);color:#fff;}
 
 /* ---------- RESUME BUILDER: IMPROVE PATH ---------- */
+/* min-height matches the old rows="10" default look for the empty
+   state; JS grows it beyond this as content is typed/pasted/uploaded.
+   overflow:hidden avoids an internal scrollbar fighting the resize. */
+#rbPasteResume{min-height:220px;overflow:hidden;}
 .improve-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1.2rem;}
 .rb-feedback-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.6rem;}
 .rb-feedback-list li{position:relative;padding-left:1.4rem;font-size:.88rem;color:var(--text);line-height:1.5;}
