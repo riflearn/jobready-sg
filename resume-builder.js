@@ -598,15 +598,79 @@
     };
   }
 
+  /* ---------- categorized feedback bubbles + ATS score ring ----------
+     Matches the resume-feedback n8n prompt's current response shape:
+     strengths[], weakActionVerbs[{original,suggestion}], grammarIssues[],
+     atsCompatibility{score,feedback[]}, missingSkills[], suggestions[]. */
+  var FB_ICONS = {
+    check: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+    edit: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>',
+    alert: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+    plus: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>',
+    zap: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>'
+  };
+
+  function fbBubbleList(items, modifier, wrap) {
+    if (!items || !items.length) return '';
+    return '<div class="fb-bubbles' + (wrap ? ' fb-bubbles--wrap' : '') + '">' + items.map(function (t) {
+      return '<div class="fb-bubble' + (modifier ? ' fb-bubble--' + modifier : '') + '">' + escapeHtml(t) + '</div>';
+    }).join('') + '</div>';
+  }
+
+  function fbSection(title, icon, bodyHtml) {
+    if (!bodyHtml) return '';
+    return '<div class="fb-section">' +
+      '<div class="fb-section__title">' + icon + '<span>' + escapeHtml(title) + '</span></div>' +
+      bodyHtml +
+    '</div>';
+  }
+
   function renderFeedbackResult(data) {
-    var feedback = data.feedback || [];
-    var feedbackHtml = feedback.map(function (f) { return '<li>' + escapeHtml(f) + '</li>'; }).join('');
+    var strengths = data.strengths || [];
+    var weakVerbs = data.weakActionVerbs || [];
+    var grammarIssues = data.grammarIssues || [];
+    var ats = data.atsCompatibility || {};
+    var atsScore = Math.max(0, Math.min(100, Math.round(Number(ats.score) || 0)));
+    var atsFeedback = ats.feedback || [];
+    var missingSkills = data.missingSkills || [];
+    var suggestions = data.suggestions || [];
+
+    var scoreTier = atsScore >= 75 ? 'good' : (atsScore >= 50 ? 'fair' : 'poor');
+    var scoreLabel = atsScore >= 75 ? 'Strong' : (atsScore >= 50 ? 'Needs work' : 'Weak');
+    var circumference = 2 * Math.PI * 52;
+    var dashOffset = circumference * (1 - atsScore / 100);
+
+    var weakVerbsHtml = weakVerbs.length
+      ? '<div class="fb-bubbles">' + weakVerbs.map(function (v) {
+          return '<div class="fb-verb-pair">' +
+            '<span class="fb-verb-pair__old">' + escapeHtml(v.original || '') + '</span>' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' +
+            '<span class="fb-verb-pair__new">' + escapeHtml(v.suggestion || '') + '</span>' +
+          '</div>';
+        }).join('') + '</div>'
+      : '';
 
     feedbackResult.innerHTML =
-      '<div class="form-section">' +
-        '<h3 class="form-section__title">Feedback</h3>' +
-        '<ul class="rb-feedback-list">' + feedbackHtml + '</ul>' +
+      '<div class="fb-score-card">' +
+        '<div class="fb-score-ring fb-score-ring--' + scoreTier + '">' +
+          '<svg width="120" height="120" viewBox="0 0 120 120">' +
+            '<circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" stroke-width="10"></circle>' +
+            '<circle cx="60" cy="60" r="52" fill="none" class="fb-score-ring__fill" stroke-width="10" ' +
+              'stroke-dasharray="' + circumference.toFixed(1) + '" stroke-dashoffset="' + dashOffset.toFixed(1) + '" ' +
+              'stroke-linecap="round" transform="rotate(-90 60 60)"></circle>' +
+          '</svg>' +
+          '<div class="fb-score-ring__num">' + atsScore + '</div>' +
+        '</div>' +
+        '<div class="fb-score-card__body">' +
+          '<div class="fb-score-card__title">ATS Compatibility &mdash; ' + scoreLabel + '</div>' +
+          (atsFeedback.length ? '<ul class="fb-score-card__list">' + atsFeedback.map(function (f) { return '<li>' + escapeHtml(f) + '</li>'; }).join('') + '</ul>' : '') +
+        '</div>' +
       '</div>' +
+      fbSection('Strengths', FB_ICONS.check, fbBubbleList(strengths, 'good')) +
+      fbSection('Weak Action Verbs', FB_ICONS.edit, weakVerbsHtml) +
+      fbSection('Grammar Issues', FB_ICONS.alert, fbBubbleList(grammarIssues, 'warn')) +
+      fbSection('Missing Skills', FB_ICONS.plus, fbBubbleList(missingSkills, 'skill', true)) +
+      fbSection('Suggestions', FB_ICONS.zap, fbBubbleList(suggestions, 'suggest')) +
       '<div class="builder-preview-wrap" style="margin-top:1.5rem;">' +
         '<div class="resume-preview" id="rbImprovedPreview"></div>' +
         '<button type="button" class="btn btn-primary" id="rbPrintImproved" style="width:100%;justify-content:center;margin-top:1rem;">Download as PDF</button>' +

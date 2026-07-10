@@ -20,6 +20,7 @@
   --hairline:#D3DCD5;
   --red-soft:rgba(169,50,38,.10);
   --green-soft:rgba(31,122,83,.12);
+  --yellow-soft:rgba(242,201,76,.18);
   --ink-wash:rgba(28,43,69,.06);
 
   --font-display:'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
@@ -66,6 +67,7 @@
   --hairline:#2A3242;
   --red-soft:rgba(229,106,93,.16);
   --green-soft:rgba(61,220,151,.14);
+  --yellow-soft:rgba(245,215,110,.16);
   --ink-wash:rgba(233,236,242,.08);
 
   --card-hover:#232B3A;
@@ -708,9 +710,37 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
    overflow:hidden avoids an internal scrollbar fighting the resize. */
 #rbPasteResume{min-height:220px;overflow:hidden;}
 .improve-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1.2rem;}
-.rb-feedback-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.6rem;}
-.rb-feedback-list li{position:relative;padding-left:1.4rem;font-size:.88rem;color:var(--text);line-height:1.5;}
-.rb-feedback-list li::before{content:'';position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+/* ---------- RESUME BUILDER: FEEDBACK BUBBLES + ATS SCORE ----------
+   Renders the resume-feedback webhook's structured response
+   (strengths / weakActionVerbs / grammarIssues / atsCompatibility /
+   missingSkills / suggestions) as a score ring + category bubbles. */
+.fb-score-card{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+.fb-score-ring{position:relative;width:120px;height:120px;flex-shrink:0;}
+.fb-score-ring__fill{stroke:var(--red);transition:stroke-dashoffset .6s ease;}
+.fb-score-ring--fair .fb-score-ring__fill{stroke:var(--yellow);}
+.fb-score-ring--good .fb-score-ring__fill{stroke:var(--green);}
+.fb-score-ring__num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.7rem;font-weight:700;color:var(--text);}
+.fb-score-card__body{flex:1;min-width:200px;}
+.fb-score-card__title{font-weight:700;font-size:1.02rem;color:var(--text);margin-bottom:.5rem;}
+.fb-score-card__list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.4rem;}
+.fb-score-card__list li{position:relative;padding-left:1.2rem;font-size:.85rem;color:var(--muted);line-height:1.5;}
+.fb-score-card__list li::before{content:'';position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--muted-2);}
+
+.fb-section{margin-top:1.4rem;}
+.fb-section__title{display:flex;align-items:center;gap:.5rem;font-family:var(--font-display);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+.fb-bubbles{display:flex;flex-direction:column;gap:.55rem;}
+.fb-bubbles--wrap{flex-direction:row;flex-wrap:wrap;gap:.5rem;}
+.fb-bubble{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--muted-2);border-radius:12px;padding:.7rem .9rem;font-size:.86rem;color:var(--text);line-height:1.5;}
+.fb-bubble--good{border-left-color:var(--green);background:var(--green-soft);}
+.fb-bubble--warn{border-left-color:var(--yellow);background:var(--yellow-soft);}
+.fb-bubble--suggest{border-left-color:var(--green);}
+.fb-bubble--skill{border-left:1px solid var(--border);background:var(--bg-alt);border-radius:100px;padding:.4rem .9rem;font-size:.8rem;font-weight:600;}
+
+.fb-verb-pair{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.65rem .9rem;font-size:.86rem;}
+.fb-verb-pair svg{flex-shrink:0;color:var(--muted-2);}
+.fb-verb-pair__old{color:var(--red);text-decoration:line-through;text-decoration-color:var(--red);}
+.fb-verb-pair__new{color:var(--green);font-weight:600;}
 
 /* ---------- RESUME BUILDER: PDF EXPORT ----------
    "Download as PDF" builds a real text-based PDF via jsPDF, drawn
