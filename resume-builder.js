@@ -601,6 +601,41 @@
     };
   }
 
+  /* Flattens the improved-resume data back into plain text so a user can
+     copy it and, e.g., re-run it through "Get AI Feedback" to see how much
+     the score moved, or paste it into a job application form. Mirrors the
+     resumeText format the feedback webhook itself expects. */
+  function resumeTextFromData(data) {
+    var lines = [];
+    if (data.name) lines.push(data.name);
+    var contactBits = [data.email, data.phone, data.links].filter(Boolean);
+    if (contactBits.length) lines.push(contactBits.join(' | '));
+    if (data.summary) lines.push('', 'SUMMARY', data.summary);
+
+    if (data.education && data.education.length) {
+      lines.push('', 'EDUCATION');
+      data.education.forEach(function (e) {
+        lines.push([e.course, e.school, e.year].filter(Boolean).join(' — '));
+      });
+    }
+
+    if (data.experience && data.experience.length) {
+      lines.push('', 'EXPERIENCE');
+      data.experience.forEach(function (e) {
+        lines.push([e.role, e.org, e.dates].filter(Boolean).join(' — '));
+        (e.desc || '').split('\n').forEach(function (point) {
+          if (point.trim()) lines.push('- ' + point.trim());
+        });
+      });
+    }
+
+    if (data.skills && data.skills.length) {
+      lines.push('', 'SKILLS', data.skills.join(', '));
+    }
+
+    return lines.join('\n').trim();
+  }
+
   /* ---------- categorized feedback bubbles + ATS score ring ----------
      Matches the resume-feedback n8n prompt's current response shape:
      strengths[], weakActionVerbs[{original,suggestion}], grammarIssues[],
@@ -676,7 +711,11 @@
       fbSection('Suggestions', FB_ICONS.zap, fbBubbleList(suggestions, 'suggest')) +
       '<div class="builder-preview-wrap" style="margin-top:1.5rem;">' +
         '<div class="resume-preview" id="rbImprovedPreview"></div>' +
-        '<button type="button" class="btn btn-primary" id="rbPrintImproved" style="width:100%;justify-content:center;margin-top:1rem;">Download as PDF</button>' +
+        '<div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem;">' +
+          '<button type="button" class="btn btn-ghost" id="rbCopyImproved" style="flex:1;justify-content:center;min-width:180px;">Copy Improved Text</button>' +
+          '<button type="button" class="btn btn-primary" id="rbPrintImproved" style="flex:1;justify-content:center;min-width:180px;">Download as PDF</button>' +
+        '</div>' +
+        '<p class="form-hint" id="rbCopyImprovedHint" style="margin-top:.6rem;">Copy this to re-check your score, or paste it into a job application.</p>' +
       '</div>';
 
     var improvedResumeData = normalizeImprovedResume(data.improvedResume);
@@ -684,6 +723,15 @@
 
     document.getElementById('rbPrintImproved').addEventListener('click', function () {
       buildResumePdf(improvedResumeData, improvedResumeData.name || 'resume');
+    });
+
+    document.getElementById('rbCopyImproved').addEventListener('click', function () {
+      var hint = document.getElementById('rbCopyImprovedHint');
+      var original = hint.textContent;
+      navigator.clipboard.writeText(resumeTextFromData(improvedResumeData)).then(function () {
+        hint.textContent = 'Copied to clipboard.';
+        setTimeout(function () { hint.textContent = original; }, 3500);
+      });
     });
   }
 
