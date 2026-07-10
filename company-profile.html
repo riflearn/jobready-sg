@@ -123,6 +123,97 @@
     return s;
   }
 
+  function parseCsv(text) {
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+
+    for (var i = 0; i < text.length; i += 1) {
+      var ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') {
+            field += '"';
+            i += 1;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          field += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(field);
+        field = '';
+      } else if (ch === '\r') {
+        continue;
+      } else if (ch === '\n') {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += ch;
+      }
+    }
+
+    if (field !== '' || row.length) {
+      row.push(field);
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  /* ---------- fallback: look up a company's profile fields from the local
+     CSV whenever the webhook comes back empty/unwired for a field - the
+     backing n8n workflow is currently only returning a placeholder stub
+     ({"myField":"value"}), so this keeps the page useful in the meantime
+     without touching that workflow (owned by a teammate). ---------- */
+  function loadLocalCompanyRow(name) {
+    name = String(name || '').trim();
+    if (!name) return Promise.resolve(null);
+
+    return fetch('Companies.csv').then(function (res) {
+      if (!res.ok) throw new Error('Local company data unavailable');
+      return res.text();
+    }).then(function (text) {
+      var csv = parseCsv(text);
+      if (!csv.length) return null;
+      var header = csv[0].map(function (cell) { return String(cell || '').trim(); });
+      var rows = csv.slice(1);
+      for (var i = 0; i < rows.length; i += 1) {
+        var item = rows[i];
+        if (!item || item.length === 0) continue;
+        var rowObj = {};
+        header.forEach(function (key, idx) {
+          rowObj[key] = String(item[idx] || '').trim();
+        });
+        if (rowObj['Company Name'].toLowerCase() === name.toLowerCase()) return rowObj;
+      }
+      return null;
+    }).catch(function () { return null; });
+  }
+
+  function fillFromLocalCsv(data, name) {
+    data = data || {};
+    var needsFallback = !cleanField(data.overview) || !cleanField(data.website) ||
+      !cleanField(data.expectations) || !cleanField(data.industry);
+    if (!needsFallback) return Promise.resolve(data);
+
+    return loadLocalCompanyRow(name).then(function (row) {
+      if (!row) return data;
+      return {
+        company: cleanField(data.company) || row['Company Name'] || '',
+        industry: cleanField(data.industry) || row['Industry / Specialization'] || '',
+        overview: cleanField(data.overview) || row['Overview'] || '',
+        website: cleanField(data.website) || row['Website'] || '',
+        expectations: cleanField(data.expectations) || row['Expectations'] || ''
+      };
+    });
+  }
+
   var content = document.getElementById('flowContent');
   var titleEl = document.getElementById('cpCompanyName');
   var industryEl = document.getElementById('cpIndustry');
@@ -218,12 +309,22 @@
       .then(function (rawText) {
         clearTimeout(timeout);
         var cleaned = rawText.replace(/```json|```/g, '').trim();
-        var data = JSON.parse(cleaned);
-        renderProfile(data);
+        var data;
+        try { data = JSON.parse(cleaned); } catch (e) { data = {}; }
+        return fillFromLocalCsv(data, company);
+      })
+      .then(function (merged) {
+        renderProfile(merged);
       })
       .catch(function () {
         clearTimeout(timeout);
-        renderError();
+        fillFromLocalCsv({}, company).then(function (merged) {
+          if (cleanField(merged.overview) || cleanField(merged.website) || cleanField(merged.expectations)) {
+            renderProfile(merged);
+          } else {
+            renderError();
+          }
+        });
       });
   }
 
