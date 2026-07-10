@@ -5,7 +5,8 @@
    and the architecture diagram simulation.
    Cross-page transitions are handled natively by the browser's
    View Transitions API (see @view-transition in style.css).
-   The Botpress chat on chat.html is a plain iframe embed, no JS needed.
+   The Botpress chat is a floating widget injected on every page
+   (see the IIFE below) rather than a dedicated chat.html page.
    ========================================================= */
 
 // Mark JS as available immediately so CSS only hides reveal-target
@@ -30,6 +31,19 @@ window.jrAuth = {
     localStorage.removeItem(this.KEY);
   }
 };
+
+/* ---------- Botpress floating chat widget (loads on every page) ---------- */
+(function () {
+  var s = document.createElement('script');
+  s.src = 'https://cdn.botpress.cloud/webchat/v3.6/inject.js';
+  s.onload = function () {
+    window.botpress.init({
+      botId: 'da2bb2c1-4daf-4568-8593-a01282a30184',
+      clientId: '25167031-b7a3-4334-9aea-97a0ff5a63e1'
+    });
+  };
+  document.head.appendChild(s);
+})();
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -66,6 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
     toggle.addEventListener('click', () => panel.classList.toggle('open'));
     panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => panel.classList.remove('open')));
   }
+
+  /* ---------- buttons/links that open the floating Botpress widget ---------- */
+  document.querySelectorAll('[data-open-chat]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.botpress && window.botpress.open) window.botpress.open();
+    });
+  });
 
   /* ---------- dark/light theme toggle ----------
      Initial theme is already applied by an inline script in <head>
