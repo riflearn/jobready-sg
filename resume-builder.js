@@ -663,7 +663,7 @@
     '</div>';
   }
 
-  function renderFeedbackResult(data) {
+  function renderFeedbackResult(data, originalText) {
     var strengths = data.strengths || [];
     var weakVerbs = data.weakActionVerbs || [];
     var grammarIssues = data.grammarIssues || [];
@@ -710,7 +710,16 @@
       fbSection('Missing Skills', FB_ICONS.plus, fbBubbleList(missingSkills, 'skill', true)) +
       fbSection('Suggestions', FB_ICONS.zap, fbBubbleList(suggestions, 'suggest')) +
       '<div class="builder-preview-wrap" style="margin-top:1.5rem;">' +
-        '<div class="resume-preview" id="rbImprovedPreview"></div>' +
+        '<div class="fb-compare">' +
+          '<div>' +
+            '<div class="fb-compare__label">Original</div>' +
+            '<div class="resume-preview fb-compare__original">' + escapeHtml(originalText || '') + '</div>' +
+          '</div>' +
+          '<div>' +
+            '<div class="fb-compare__label">Improved</div>' +
+            '<div class="resume-preview" id="rbImprovedPreview"></div>' +
+          '</div>' +
+        '</div>' +
         '<div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem;">' +
           '<button type="button" class="btn btn-ghost" id="rbCopyImproved" style="flex:1;justify-content:center;min-width:180px;">Copy Improved Text</button>' +
           '<button type="button" class="btn btn-primary" id="rbPrintImproved" style="flex:1;justify-content:center;min-width:180px;">Download as PDF</button>' +
@@ -768,7 +777,7 @@
           clearTimeout(timeout);
           var cleaned = rawText.replace(/```json|```/g, '').trim();
           var data = JSON.parse(cleaned);
-          renderFeedbackResult(data);
+          renderFeedbackResult(data, text);
         })
         .catch(function () {
           clearTimeout(timeout);

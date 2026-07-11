@@ -747,6 +747,17 @@ html.js-ready #demoBody .convo-msg.shown{opacity:1;}
   min-height:400px;max-height:80vh;overflow-y:auto;
 }
 .resume-preview.is-empty{display:flex;align-items:center;justify-content:center;color:#8A9490;font-size:.9rem;text-align:center;}
+
+/* ---------- RESUME FEEDBACK: BEFORE/AFTER COMPARISON ----------
+   Side-by-side original-vs-improved so a student doesn't have to hold
+   the original in their head while reading the rewritten version. The
+   original has no structured data to render as a matching resume card
+   (it's just raw pasted/extracted text), so it reuses .resume-preview's
+   "paper" card styling with pre-wrapped plain text instead. */
+.fb-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+@media(max-width:900px){.fb-compare{grid-template-columns:1fr;}}
+.fb-compare__label{font-family:var(--font-display);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.6rem;}
+.fb-compare__original{white-space:pre-wrap;font-size:.85rem;line-height:1.6;}
 .rp-name{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:#1C2B45;margin-bottom:.3rem;}
 .rp-contact{font-size:.82rem;color:#4A5A72;margin-bottom:1.4rem;}
 .rp-section{margin-bottom:1.4rem;}
