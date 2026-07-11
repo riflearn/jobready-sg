@@ -743,10 +743,13 @@
         return;
       }
 
-      feedbackResult.innerHTML =
-        '<p class="form-hint" style="margin-top:0;margin-bottom:.8rem;">Reading your resume and preparing feedback… this can take up to a minute.</p>' +
-        '<div class="skeleton" style="height:20px;width:60%;margin-bottom:10px;"></div>' +
-        '<div class="skeleton" style="height:200px;"></div>';
+      window.jrAiLoading(feedbackResult, [
+        'Reading your resume…',
+        'Checking formatting and structure…',
+        'Evaluating ATS compatibility…',
+        'Polishing suggestions…',
+        'Almost done…'
+      ]);
 
       var controller = new AbortController();
       // LLM calls have been observed taking 30-45s depending on resume

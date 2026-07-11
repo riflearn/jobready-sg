@@ -76,25 +76,72 @@
 </div>
 
 <section class="section section-tight">
-  <div class="interview-shell">
-    <div class="interviewer-panel">
-      <div class="interviewer-avatar">AI</div>
-      <div class="interviewer-details">
-        <div class="interviewer-name">AI Interview Coach</div>
-        <div class="interviewer-role">Human-style interviewer</div>
-        <div class="interviewer-notes">Speaks like a human, hears your response, and asks 5 company-standard follow-up questions. Feedback is provided at the end.</div>
+  <div class="call-shell">
+    <div class="call-topbar">
+      <div class="call-topbar-avatar">AI</div>
+      <div class="call-topbar-info">
+        <strong>AI Interview Coach</strong>
+        <span>Human-style interviewer &middot; 5 company-standard questions</span>
       </div>
+      <div class="call-topbar-company">
+        <label for="companySelect">Interviewing for</label>
+        <select id="companySelect"><option value="">Generic (no company selected)</option></select>
+      </div>
+      <div class="call-topbar-status" id="interviewStatus"><span class="dot"></span><span id="interviewStatusText">Ready to begin</span></div>
     </div>
-    <div class="interview-status" id="interviewStatus">Ready to begin</div>
-    <div class="interview-history" id="interviewHistory" aria-live="polite"></div>
-    <div class="interview-caption" id="interviewCaption">Live captions appear here while the coach speaks.</div>
 
-    <div class="interview-controls">
-      <div class="interview-input-row">
-        <input id="textInput" class="interview-text-input" type="text" placeholder="Type your answer here…" aria-label="Type your answer" autocomplete="off">
-        <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+    <div class="call-banner" id="callBanner" hidden></div>
+
+    <div class="call-main">
+      <div class="call-stage" id="callStage">
+        <div id="avatarFrame" style="position:relative;width:190px;height:230px;margin:0 auto;display:flex;align-items:center;justify-content:center;">
+          <div id="avatarRing" style="position:absolute;inset:14px;border-radius:50%;border:3px solid #185FA5;opacity:0;"></div>
+          <svg id="avatarSvg" viewBox="0 0 100 130" width="150" height="195">
+            <path d="M8,130 Q8,96 28,89 L72,89 Q92,96 92,130 Z" fill="#185FA5"></path>
+            <path d="M40,89 L50,102 L44,89 Z" fill="#FFFFFF"></path>
+            <path d="M60,89 L50,102 L56,89 Z" fill="#FFFFFF"></path>
+            <rect x="41" y="76" width="18" height="20" rx="4" fill="#FAEEDA"></rect>
+            <ellipse cx="50" cy="48" rx="25" ry="28" fill="#FAEEDA"></ellipse>
+            <path d="M24,44 Q22,14 50,12 Q78,14 76,44 Q74,24 50,20 Q26,24 24,44 Z" fill="#2C2C2A"></path>
+            <path d="M34,38 Q39,34 44,37" stroke="#2C2C2A" stroke-width="2.2" fill="none" stroke-linecap="round"></path>
+            <path d="M56,37 Q61,34 66,38" stroke="#2C2C2A" stroke-width="2.2" fill="none" stroke-linecap="round"></path>
+            <g id="eyeL" style="transform-origin:39px 45px;">
+              <ellipse cx="39" cy="45" rx="5" ry="5.5" fill="#FFFFFF"></ellipse>
+              <circle cx="39" cy="46" r="2.6" fill="#2C2C2A"></circle>
+            </g>
+            <g id="eyeR" style="transform-origin:61px 45px;">
+              <ellipse cx="61" cy="45" rx="5" ry="5.5" fill="#FFFFFF"></ellipse>
+              <circle cx="61" cy="46" r="2.6" fill="#2C2C2A"></circle>
+            </g>
+            <path d="M50,50 L48,60 Q50,62 52,60" stroke="#E0B98C" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
+            <path id="mouthIdle" d="M40,68 Q50,73 60,68" stroke="#993C1D" stroke-width="2.2" fill="none" stroke-linecap="round"></path>
+            <ellipse id="mouthTalk" cx="50" cy="69" rx="9" ry="2" fill="#993C1D" opacity="0" style="transform-origin:50px 69px;"></ellipse>
+          </svg>
+        </div>
+        <div class="call-selfview" id="selfView" hidden>
+          <video id="selfViewVideo" autoplay muted playsinline></video>
+        </div>
+        <div class="call-caption" id="interviewCaption">Live captions appear here while the coach speaks.</div>
       </div>
-      <button class="btn btn-ghost btn-mic" id="micBtn" type="button" aria-label="Toggle voice input">🎤</button>
+
+      <aside class="call-chat" id="callChat">
+        <div class="call-chat-header">
+          <span>Chat</span>
+          <button class="call-chat-close" id="chatCloseBtn" type="button" aria-label="Hide chat">✕</button>
+        </div>
+        <div class="interview-history" id="interviewHistory" aria-live="polite"></div>
+        <div class="interview-input-row">
+          <input id="textInput" class="interview-text-input" type="text" placeholder="Type your answer here…" aria-label="Type your answer" autocomplete="off">
+          <button class="interview-mic-btn" id="micBtn" type="button" aria-label="Toggle microphone" aria-pressed="false" title="Speak your answer">🎤</button>
+          <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="call-controls">
+      <button class="call-control-btn" id="camBtn" type="button" aria-label="Toggle camera" aria-pressed="false" title="Show your camera preview">🎥<span>Camera</span></button>
+      <button class="call-control-btn" id="chatToggleBtn" type="button" aria-label="Toggle chat panel" aria-pressed="true" title="Show or hide chat">💬<span>Chat</span></button>
+      <button class="call-control-btn call-control-btn--end" id="endCallBtn" type="button" title="Leave the interview">📞<span>End</span></button>
     </div>
 
     <div class="interview-summary" id="interviewSummary" hidden></div>
@@ -131,15 +178,44 @@
   var recognition = null;
   var localInterview = null;
   var isListening = false;
+  var micRecordingActive = false;
+  var micBaseText = '';
+  var micFinalText = '';
+  var micRestartAttempts = 0;
+  var micSilenceTimer = null;
+  var MIC_SILENCE_MS = 5000;
   var currentState = 'idle';
+  var selfViewStream = null;
 
   var textInput = document.getElementById('textInput');
   var sendBtn = document.getElementById('sendBtn');
   var micBtn = document.getElementById('micBtn');
+  var camBtn = document.getElementById('camBtn');
+  var chatToggleBtn = document.getElementById('chatToggleBtn');
+  var chatCloseBtn = document.getElementById('chatCloseBtn');
+  var endCallBtn = document.getElementById('endCallBtn');
+  var callChat = document.getElementById('callChat');
+  var callStage = document.getElementById('callStage');
+  var callBanner = document.getElementById('callBanner');
+  var selfView = document.getElementById('selfView');
+  var selfViewVideo = document.getElementById('selfViewVideo');
   var interviewHistory = document.getElementById('interviewHistory');
   var interviewStatus = document.getElementById('interviewStatus');
+  var interviewStatusText = document.getElementById('interviewStatusText');
   var interviewCaption = document.getElementById('interviewCaption');
   var interviewSummary = document.getElementById('interviewSummary');
+  var companySelect = document.getElementById('companySelect');
+  var companiesData = [];
+
+  function showBanner(message, isWarn) {
+    callBanner.textContent = message;
+    callBanner.className = 'call-banner' + (isWarn ? ' call-banner--warn' : '');
+    callBanner.hidden = false;
+  }
+
+  function hideBanner() {
+    callBanner.hidden = true;
+  }
 
   var context = getContext();
   var quizScore = getQuizScore();
@@ -192,73 +268,345 @@
     return unique;
   }
 
+  function buildExampleAnswers(employer) {
+    return [
+      'Here’s the kind of specificity I’m looking for: “During a group project, we fell behind because two of us had different assumptions about the requirements. I flagged it within a day, we agreed on one shared spec, and we still delivered on time.”',
+      'For instance: “If a client’s requirements changed midway through a project, I’d document exactly what changed, check which work is still usable, and send the team a revised plan the same day so nobody is left guessing.”',
+      'Something like: “At my last internship, skipping that step once caused a two-day delay when an error surfaced late — that’s exactly why it matters for a role at ' + employer + '.”',
+      'For example: “When I noticed a recurring bug pattern, I traced it to one shared function, fixed it there instead of patching each symptom, and it cut that class of bug to almost zero the following sprint.”',
+      'Something like: “In a previous role I noticed requests were being triaged inconsistently, proposed a simple priority system, and cut our average response time by half — that’s the kind of ownership I’d bring to ' + employer + '.”'
+    ];
+  }
+
   function buildLocalInterview(company, expectations) {
     var terms = getInterviewTerms(expectations);
     var employer = company || 'the company';
+    var questions = [
+      'Tell me about a time when you demonstrated ' + terms[0] + ' in a team or work setting.',
+      'How would you apply ' + terms[1] + ' in a real workplace situation?',
+      'Why is ' + terms[2] + ' important for a role like this, especially at ' + employer + '?',
+      'If you faced a challenge that required ' + terms[3] + ', what would you do?',
+      'What makes you a strong fit for ' + employer + ' based on your experience with ' + terms[0] + '?'
+    ];
     return {
       company: employer,
       expectations: expectations || '',
       terms: terms,
-      questions: [
-        'Tell me about a time when you demonstrated ' + terms[0] + ' in a team or work setting.',
-        'How would you apply ' + terms[1] + ' in a real workplace situation?',
-        'Why is ' + terms[2] + ' important for a role like this, especially at ' + employer + '?',
-        'If you faced a challenge that required ' + terms[3] + ', what would you do?',
-        'What makes you a strong fit for ' + employer + ' based on your experience with ' + terms[0] + '?'
-      ],
+      questions: questions,
+      examples: buildExampleAnswers(employer),
       answers: [],
-      currentIndex: 0
+      currentIndex: 0,
+      followUpUsed: questions.map(function () { return false; }),
+      awaitingFollowUp: false
     };
   }
 
-  function scoreLocalAnswer(answer, terms) {
-    var text = String(answer || '').toLowerCase();
-    var matches = terms.reduce(function (count, term) {
-      return count + (term && text.indexOf(term.toLowerCase()) !== -1 ? 1 : 0);
-    }, 0);
-    return Math.min(100, Math.max(20, 50 + matches * 10));
+  var SITUATION_PATTERN = /\b(for example|for instance|once|when i|i was|i had|in my (last|previous|current)|during my|while i was|specifically|one time|there was a time|last (year|month|week|semester)|at my (last|previous|current)?\s?(job|internship|role|company))\b/i;
+  var ACTION_PATTERN = /\bi (built|created|wrote|implemented|designed|led|organized|coordinated|developed|fixed|debugged|analyzed|presented|proposed|negotiated|decided|reached out|escalated|documented|automated|refactored|tested|deployed|launched|managed|delegated|reviewed|flagged|set up|reached|split|broke down|reorganized)\b/i;
+  var OUTCOME_PATTERN = /\b(result(ed)?|resulting|led to|which led|as a result|reduced|increased|improved|decreased|saved|fixed|solved|resolved|completed|delivered|achieved|so that|which meant|ended up|we (managed|were able) to)\b/i;
+
+  function splitSentences(text) {
+    return String(text || '').split(/[.!?]+/).map(function (s) { return s.trim(); }).filter(Boolean);
   }
 
-  function describeAnswerQuality(score) {
-    if (score >= 85) return 'That was a strong and confident answer.';
-    if (score >= 65) return 'That was a good response with solid points.';
-    return 'That answer was a good start, but try to give more specific examples.';
+  function lowerFirst(str) {
+    return str ? str.charAt(0).toLowerCase() + str.slice(1) : str;
+  }
+
+  function extractHighlight(text) {
+    var sentences = splitSentences(text);
+    var chosen = sentences.filter(function (s) { return OUTCOME_PATTERN.test(s); })[0]
+      || sentences.filter(function (s) { return ACTION_PATTERN.test(s); })[0]
+      || sentences[sentences.length - 1]
+      || text;
+    var words = chosen.split(/\s+/);
+    if (words.length > 18) chosen = words.slice(0, 18).join(' ') + '…';
+    return chosen.trim();
+  }
+
+  function evaluateAnswer(answer, terms) {
+    var text = String(answer || '').trim();
+    var words = text.split(/\s+/).filter(Boolean);
+    var wordCount = words.length;
+    var lower = text.toLowerCase();
+
+    var termMatches = terms.reduce(function (count, term) {
+      return count + (term && lower.indexOf(term.toLowerCase()) !== -1 ? 1 : 0);
+    }, 0);
+
+    var hasSituation = SITUATION_PATTERN.test(text);
+    var hasAction = ACTION_PATTERN.test(text);
+    var hasOutcome = OUTCOME_PATTERN.test(text) || /\d/.test(text);
+    var starScore = (hasSituation ? 1 : 0) + (hasAction ? 1 : 0) + (hasOutcome ? 1 : 0);
+
+    var isSpecific = wordCount >= 18 && starScore >= 2;
+    var quality = isSpecific ? 'specific' : 'vague';
+
+    var scoreBase = quality === 'specific' ? 72 : 35;
+    var score = scoreBase + starScore * 6 + termMatches * 3 + Math.min(wordCount, 60) / 8;
+    score = Math.max(10, Math.min(97, Math.round(score)));
+
+    return {
+      quality: quality, hasSituation: hasSituation, hasAction: hasAction, hasOutcome: hasOutcome,
+      wordCount: wordCount, termMatches: termMatches, score: score
+    };
+  }
+
+  var recentPicks = {};
+  function pickVaried(poolName, pool) {
+    if (pool.length === 1) return pool[0];
+    var lastIndex = recentPicks[poolName];
+    var idx;
+    do { idx = Math.floor(Math.random() * pool.length); } while (idx === lastIndex);
+    recentPicks[poolName] = idx;
+    return pool[idx];
+  }
+
+  var VAGUE_INVITE_POOL = [
+    'Want to give it another go with that level of detail, or should we move on?',
+    'Take another shot at it with specifics like that, or we can continue — your call.',
+    'You’re welcome to try again with that kind of detail, or we can move to the next question.'
+  ];
+  var VAGUE_MOVE_ON_POOL = [
+    'That’s still fairly general, but let’s move on.',
+    'I still don’t have a concrete example there — I’ll note that. Next question.',
+    'We’ll leave that one there. Moving on.'
+  ];
+  var SPECIFIC_ACK_TEMPLATES = [
+    'I like how you mentioned {highlight} — that’s the kind of detail I want to hear.',
+    'That comes through clearly, especially {highlightLower}.',
+    'Understood — particularly the part about {highlightLower}.',
+    'That’s clear: {highlightLower} gives me a real picture of what happened.'
+  ];
+
+  function buildMissingPieceCallout(evaluation) {
+    var missing = [];
+    if (!evaluation.hasSituation) missing.push('what the actual situation was');
+    if (!evaluation.hasAction) missing.push('what you specifically did');
+    if (!evaluation.hasOutcome) missing.push('what the outcome was');
+    if (!missing.length) missing.push('more concrete detail');
+    var joined = missing.length === 1 ? missing[0] : missing.slice(0, -1).join(', ') + ' and ' + missing[missing.length - 1];
+    var templates = [
+      'I don’t have a sense of ' + joined + '.',
+      'Right now I can’t tell ' + joined + '.',
+      'That’s still pretty general — I need to know ' + joined + '.'
+    ];
+    return pickVaried('missing_' + missing.length, templates);
+  }
+
+  function buildSpecificAcknowledgment(message) {
+    var highlight = extractHighlight(message);
+    var template = pickVaried('specific_ack', SPECIFIC_ACK_TEMPLATES);
+    return template.replace('{highlight}', highlight).replace('{highlightLower}', lowerFirst(highlight));
   }
 
   function buildLocalSummary() {
+    var perQuestion = {};
+    localInterview.answers.forEach(function (a) { perQuestion[a.questionIndex] = a; });
+    var finalAnswers = Object.keys(perQuestion).map(function (k) { return perQuestion[k]; });
     var total = localInterview.questions.length;
-    var scoreSum = localInterview.answers.reduce(function (sum, item) {
-      return sum + (item.score || 0);
-    }, 0);
-    var average = Math.round(scoreSum / Math.max(total, 1));
-    var strong = localInterview.answers.filter(function (item) { return item.score >= 70; }).length;
-    var weak = localInterview.answers.filter(function (item) { return item.score < 70; }).length;
+
+    var scoreSum = finalAnswers.reduce(function (sum, a) { return sum + a.score; }, 0);
+    var average = Math.round(scoreSum / Math.max(finalAnswers.length, 1));
+
+    var specificCount = finalAnswers.filter(function (a) { return a.quality === 'specific'; }).length;
+    var vagueCount = finalAnswers.filter(function (a) { return a.quality === 'vague'; }).length;
+
+    var overallImpression;
+    if (average >= 78) {
+      overallImpression = 'A solid interview overall — most answers were specific and relevant to the role.';
+    } else if (average >= 55) {
+      overallImpression = 'A mixed performance. When an example was ready, it showed; when it wasn’t, the answers thinned out noticeably.';
+    } else {
+      overallImpression = 'This interview had real gaps — too many answers stayed general without a concrete example behind them.';
+    }
+
+    var examplesUsed = specificCount >= 3
+      ? 'You backed up ' + specificCount + ' out of ' + total + ' answers with a specific situation, action, and outcome — that stood out the most.'
+      : specificCount > 0
+        ? specificCount + ' of your ' + total + ' answers included a clear, specific example. The rest leaned on general statements.'
+        : 'None of your answers included a fully worked example yet — that’s the main gap right now.';
+
+    var areasForImprovement = vagueCount === 0
+      ? 'Even your weaker moments stayed on-topic. Keep tightening the specificity of your examples.'
+      : vagueCount + ' answer' + (vagueCount === 1 ? ' was' : 's were') + ' too general or short on detail. Before your next practice run, prepare one or two concrete stories that show ' + localInterview.terms.slice(0, 2).join(' and ') + ' in action — a specific situation, what you did, and the outcome.';
+
+    var hiringRecommendation = average >= 82 ? 'Hire'
+      : average >= 65 ? 'Leaning hire'
+      : average >= 45 ? 'No hire'
+      : 'Strong no hire';
+
     return {
-      INTERVIEW_SCORE: average,
-      strengths: 'You answered ' + strong + ' out of ' + total + ' questions with good clarity and relevance.',
-      areasToImprove: weak > 0
-        ? 'Try to use more concrete examples and directly mention company-relevant terms such as ' + localInterview.terms.join(', ') + ' in your answers.'
-        : 'Your answers were well structured and relevant to the company.',
-      finalFeedback: 'Great work! Keep practicing with real examples and company-specific language for even better interview performance.'
+      overall_score: average,
+      overall_impression: overallImpression,
+      communication: specificCount >= vagueCount
+        ? 'Communicated clearly for the most part, with answers that were easy to follow.'
+        : 'Answers were sometimes hard to pin down — more direct, structured responses would help.',
+      problem_solving: specificCount > 0
+        ? 'Showed a workable approach to problems when pressed for detail.'
+        : 'Hard to assess problem-solving without a concrete example of a problem actually being solved.',
+      examples_used: examplesUsed,
+      confidence: average >= 65 ? 'Came across as reasonably confident and prepared.' : 'Confidence was hard to gauge — answers often stayed at a surface level.',
+      areas_for_improvement: areasForImprovement,
+      hiring_recommendation: hiringRecommendation
     };
   }
 
-  function startLocalInterview() {
+  function startInterview() {
     localInterview = buildLocalInterview(context.company, context.expectations);
-    appendMessage('ai', 'Hi! I am your interview coach. We will do a 5-round mock interview for ' + (context.company || 'this company') + '. ' + localInterview.questions[0]);
-    setState('idle');
+    setState('thinking');
+    var opener = 'Hello. I’ll be conducting a mock interview for ' + (context.company || 'this company') + ' today — five questions, similar to what you’d expect from their process. Let’s begin. ' + localInterview.questions[0];
+    appendMessage('ai', opener);
+    speakText(opener).then(function () { setState('idle'); });
   }
 
-  function processLocalInterviewAnswer(message) {
-    var score = scoreLocalAnswer(message, localInterview.terms);
-    var feedback = describeAnswerQuality(score);
-    localInterview.answers.push({ text: message, score: score });
+  function parseCsv(text) {
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
 
-    var isLast = localInterview.currentIndex >= localInterview.questions.length - 1;
-    var reply = feedback;
+    for (var i = 0; i < text.length; i += 1) {
+      var ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') { field += '"'; i += 1; }
+          else { inQuotes = false; }
+        } else {
+          field += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(field);
+        field = '';
+      } else if (ch === '\r') {
+        continue;
+      } else if (ch === '\n') {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += ch;
+      }
+    }
+    if (field !== '' || row.length) {
+      row.push(field);
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  function loadCompanies() {
+    return fetch('Companies.csv')
+      .then(function (res) {
+        if (!res.ok) throw new Error('csv_unavailable');
+        return res.text();
+      })
+      .then(function (text) {
+        var rows = parseCsv(text);
+        if (!rows.length) return;
+        var header = rows[0].map(function (c) { return String(c || '').trim(); });
+        var nameIdx = header.indexOf('Company Name');
+        var expectIdx = header.indexOf('Expectations');
+        if (nameIdx === -1) return;
+
+        companiesData = rows.slice(1)
+          .filter(function (r) { return r && r.length && String(r[nameIdx] || '').trim(); })
+          .map(function (r) {
+            return { name: String(r[nameIdx] || '').trim(), expectations: String(r[expectIdx] || '').trim() };
+          });
+        companiesData.sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+        companiesData.forEach(function (c) {
+          var opt = document.createElement('option');
+          opt.value = c.name;
+          opt.textContent = c.name;
+          companySelect.appendChild(opt);
+        });
+
+        if (context.company) {
+          companySelect.value = context.company;
+        }
+      })
+      .catch(function () {
+        // No company list available — the picker just stays on "Generic";
+        // the interview still works fine with whatever context (or none) exists.
+      });
+  }
+
+  function hasInterviewProgress() {
+    return !!(localInterview && localInterview.answers && localInterview.answers.length > 0);
+  }
+
+  function resetAndStartInterview() {
+    clearMicSilenceTimer();
+    if (recognition && isListening) recognition.stop();
+    micRecordingActive = false;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    interviewHistory.innerHTML = '';
+    interviewSummary.hidden = true;
+    interviewSummary.innerHTML = '';
+    localInterview = null;
+    hideBanner();
+    updateCaption('');
+    textInput.disabled = false;
+    sendBtn.disabled = false;
+    micBtn.disabled = !SpeechRecognition;
+    startInterview();
+  }
+
+  companySelect.addEventListener('change', function () {
+    var name = companySelect.value;
+    if (name === (context.company || '')) return;
+
+    if (hasInterviewProgress()) {
+      var ok = confirm('Switch to ' + (name || 'a generic interview') + '? This restarts the mock interview — your current answers will be lost.');
+      if (!ok) {
+        companySelect.value = context.company || '';
+        return;
+      }
+    }
+
+    var match = companiesData.filter(function (c) { return c.name === name; })[0];
+    context.company = name;
+    context.expectations = match ? match.expectations : '';
+    try {
+      sessionStorage.setItem(CONTEXT_KEY, JSON.stringify({ company: context.company, expectations: context.expectations }));
+    } catch (e) { /* sessionStorage unavailable — interview still works, just won't persist across pages */ }
+
+    resetAndStartInterview();
+  });
+
+  function processLocalInterviewAnswer(message) {
+    var q = localInterview.currentIndex;
+    var evaluation = evaluateAnswer(message, localInterview.terms);
+    localInterview.answers.push({ text: message, score: evaluation.score, quality: evaluation.quality, questionIndex: q });
+
+    var alreadyFollowedUp = localInterview.followUpUsed[q];
+    localInterview.awaitingFollowUp = false;
+
+    if (evaluation.quality === 'vague' && !alreadyFollowedUp) {
+      localInterview.followUpUsed[q] = true;
+      localInterview.awaitingFollowUp = true;
+      var callout = buildMissingPieceCallout(evaluation);
+      var example = localInterview.examples[q];
+      var invite = pickVaried('vague_invite', VAGUE_INVITE_POOL);
+      var followUp = callout + ' ' + example + ' ' + invite;
+      appendMessage('ai', followUp);
+      speakText(followUp).then(function () { setState('idle'); });
+      return;
+    }
+
+    var reply = evaluation.quality === 'specific'
+      ? buildSpecificAcknowledgment(message)
+      : pickVaried('vague_move_on', VAGUE_MOVE_ON_POOL);
+
+    var isLast = q >= localInterview.questions.length - 1;
 
     if (isLast) {
-      reply += ' That concludes our mock interview. I will provide your feedback now.';
+      reply += ' That was the last question. Give me a moment to go over your answers.';
       appendMessage('ai', reply);
       speakText(reply).then(function () {
         showSummary(buildLocalSummary());
@@ -275,28 +623,37 @@
     });
   }
 
-  function renderError(message) {
-    appendMessage('ai', message);
-    setState('idle');
+  function setAvatarState(s) {
+    var ring = document.getElementById('avatarRing');
+    var avatar = document.getElementById('avatarSvg');
+    ring.className = ''; avatar.className = '';
+    if (s === 'speaking') { ring.style.opacity = 1; ring.classList.add('speaking'); avatar.classList.add('speaking'); }
+    else if (s === 'listening') { ring.style.opacity = 1; ring.classList.add('listening'); }
+    else { ring.style.opacity = 0; }
   }
 
   function setState(state) {
     currentState = state;
-    interviewStatus.textContent = {
+    var label = {
       idle: 'Ready to begin your mock interview.',
       listening: 'Listening… speak now.',
       thinking: 'Thinking… please wait.',
       speaking: 'Speaking… listen to the coach.'
     }[state] || 'Ready to begin your mock interview.';
 
+    interviewStatusText.textContent = label;
+    interviewStatus.className = 'call-topbar-status is-' + state;
+
     var disabled = state !== 'idle';
+    // While actively listening, the candidate must still be able to stop
+    // the mic (click it again) or force-submit (Send) at any time — only
+    // the text box itself stays locked, to avoid racing with live dictation.
+    var lockedByListening = disabled && state !== 'listening';
     textInput.disabled = disabled;
-    sendBtn.disabled = disabled;
-    if (!SpeechRecognition) micBtn.disabled = disabled || true;
-    if (state === 'speaking' || state === 'thinking') {
-      micBtn.disabled = true;
-    }
-    micBtn.classList.toggle('active', state === 'listening');
+    sendBtn.disabled = lockedByListening;
+    micBtn.disabled = !SpeechRecognition || lockedByListening;
+    micBtn.classList.toggle('is-active', state === 'listening');
+    micBtn.setAttribute('aria-pressed', state === 'listening' ? 'true' : 'false');
   }
 
   function appendMessage(role, text) {
@@ -311,20 +668,21 @@
     interviewCaption.textContent = text ? text : 'Live captions appear here while the coach speaks.';
   }
 
-  function showSummary(data) {
-    var score = data.INTERVIEW_SCORE || data.interviewScore || data.score || 'N/A';
-    var strengths = data.strengths || data.strengthsText || data.areasOfStrength || 'No strengths summary provided.';
-    var improvements = data.areasToImprove || data.improvements || data.improvementAreas || 'No improvement areas provided.';
-    var finalNotes = data.finalFeedback || data.feedback || data.summary || '';
+  function showSummary(evaluation) {
+    var score = evaluation.overall_score != null ? evaluation.overall_score : 'N/A';
 
     interviewSummary.hidden = false;
     interviewSummary.innerHTML =
       '<div class="interview-summary-card">' +
         '<h2>Interview complete</h2>' +
         '<div class="interview-summary-row"><strong>Score</strong><span>' + escapeHtml(String(score)) + '%</span></div>' +
-        '<div class="interview-summary-row"><strong>Strengths</strong><p>' + escapeHtml(strengths) + '</p></div>' +
-        '<div class="interview-summary-row"><strong>Areas to improve</strong><p>' + escapeHtml(improvements) + '</p></div>' +
-        (finalNotes ? '<div class="interview-summary-row"><strong>Final note</strong><p>' + escapeHtml(finalNotes) + '</p></div>' : '') +
+        '<div class="interview-summary-row"><strong>Hiring recommendation</strong><p>' + escapeHtml(evaluation.hiring_recommendation || 'N/A') + '</p></div>' +
+        '<div class="interview-summary-row"><strong>Overall impression</strong><p>' + escapeHtml(evaluation.overall_impression || '') + '</p></div>' +
+        '<div class="interview-summary-row"><strong>Communication</strong><p>' + escapeHtml(evaluation.communication || '') + '</p></div>' +
+        '<div class="interview-summary-row"><strong>Problem solving</strong><p>' + escapeHtml(evaluation.problem_solving || '') + '</p></div>' +
+        '<div class="interview-summary-row"><strong>Examples used</strong><p>' + escapeHtml(evaluation.examples_used || '') + '</p></div>' +
+        '<div class="interview-summary-row"><strong>Confidence</strong><p>' + escapeHtml(evaluation.confidence || '') + '</p></div>' +
+        '<div class="interview-summary-row"><strong>Areas to improve</strong><p>' + escapeHtml(evaluation.areas_for_improvement || '') + '</p></div>' +
       '</div>';
 
     setState('idle');
@@ -345,13 +703,16 @@
       utterance.onstart = function () {
         updateCaption(text);
         setState('speaking');
+        setAvatarState('speaking');
       };
       utterance.onend = function () {
         setState('idle');
+        setAvatarState('listening');
         resolve();
       };
       utterance.onerror = function () {
         setState('idle');
+        setAvatarState('listening');
         resolve();
       };
       window.speechSynthesis.cancel();
@@ -361,11 +722,17 @@
 
   function sendInterviewMessage(message) {
     message = String(message || '').trim();
-    if (!message || currentState !== 'idle') return;
+    // Allow sending from 'listening' too — the caller already called
+    // stopMicRecording() synchronously; recognition.stop() itself is async,
+    // so currentState may not have flipped back to 'idle' yet.
+    if (!message || (currentState !== 'idle' && currentState !== 'listening')) return;
 
     appendMessage('user', message);
     textInput.value = '';
+    micBaseText = '';
+    micFinalText = '';
     setState('thinking');
+    setAvatarState('idle');
     session.exchangeCount += 1;
     saveSession();
 
@@ -376,20 +743,108 @@
     processLocalInterviewAnswer(message);
   }
 
+  function micErrorMessage(err) {
+    var name = err && err.name;
+    if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || err === 'not-allowed' || err === 'service-not-allowed') {
+      return 'Microphone access is blocked for this page. Click the lock/camera icon in your browser’s address bar, allow microphone access, then click the mic button again.';
+    }
+    if (name === 'NotFoundError' || name === 'DevicesNotFoundError' || err === 'audio-capture') {
+      return 'No microphone was found on this device. Plug one in, or type your answer in the chat instead.';
+    }
+    if (err === 'network') {
+      return 'Voice recognition needs an internet connection. Check your connection or type your answer instead.';
+    }
+    if (err === 'no-speech') {
+      return null;
+    }
+    return 'Voice input ran into a problem (' + (name || err || 'unknown error') + '). You can type your answer instead.';
+  }
+
+  function updateMicTextbox(interim) {
+    var combined = micBaseText;
+    if (micFinalText) combined = combined ? combined + ' ' + micFinalText : micFinalText;
+    if (interim) combined = combined ? combined + ' ' + interim : interim;
+    textInput.value = combined;
+  }
+
+  function clearMicSilenceTimer() {
+    if (micSilenceTimer) {
+      clearTimeout(micSilenceTimer);
+      micSilenceTimer = null;
+    }
+  }
+
+  function armMicSilenceTimer() {
+    clearMicSilenceTimer();
+    micSilenceTimer = setTimeout(function () {
+      micSilenceTimer = null;
+      // No speech detected for a while — the candidate is done talking.
+      // Stop listening (this is NOT a send; the text just sits in the box,
+      // editable, waiting for the candidate to hit Send themselves).
+      stopMicRecording();
+    }, MIC_SILENCE_MS);
+  }
+
+  function stopMicRecording() {
+    clearMicSilenceTimer();
+    if (!micRecordingActive && !isListening) return;
+    // Flip the flag first so the 'end' handler (and any pending auto-restart
+    // timer) knows this was a real stop, not a browser hiccup.
+    micRecordingActive = false;
+    if (recognition && isListening) {
+      recognition.stop(); // 'end' event will transition currentState to idle
+    } else if (currentState === 'listening') {
+      // Nothing is actually running right now — e.g. this landed in the
+      // brief gap between an auto-restart's 'end' and its retry — so no
+      // 'end' event is coming to do this for us.
+      setState('idle');
+    }
+  }
+
   function toggleListening() {
     if (!recognition) return;
-    if (isListening) {
-      recognition.stop();
+
+    if (isListening || micRecordingActive) {
+      stopMicRecording();
       return;
     }
-    recognition.start();
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showBanner('This browser can’t access the microphone from this page. Please type your answer instead.', true);
+      return;
+    }
+
+    micBtn.disabled = true;
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(function (stream) {
+        stream.getTracks().forEach(function (track) { track.stop(); });
+        hideBanner();
+        // Whatever is already in the box (typed or from a prior dictation
+        // pass) becomes the base — new speech is appended, never overwritten.
+        micBaseText = textInput.value.trim();
+        micFinalText = '';
+        micRestartAttempts = 0;
+        micRecordingActive = true;
+        try {
+          recognition.start();
+          armMicSilenceTimer();
+        } catch (e) {
+          micRecordingActive = false;
+          micBtn.disabled = false;
+        }
+      })
+      .catch(function (err) {
+        micBtn.disabled = false;
+        showBanner(micErrorMessage(err), true);
+      });
   }
 
   function setupRecognition() {
     if (!SpeechRecognition) return;
     recognition = new SpeechRecognition();
     recognition.lang = 'en-US';
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
     recognition.addEventListener('start', function () {
@@ -398,16 +853,55 @@
     });
 
     recognition.addEventListener('result', function (event) {
-      var transcript = Array.from(event.results)
-        .map(function (result) { return result[0].transcript; })
-        .join('');
-      if (transcript) {
-        sendInterviewMessage(transcript);
+      if (!micRecordingActive) return; // stale/trailing result after we already stopped or sent — discard it
+      var interim = '';
+      for (var i = event.resultIndex; i < event.results.length; i++) {
+        var result = event.results[i];
+        var transcript = result[0].transcript;
+        if (result.isFinal) {
+          transcript = transcript.trim();
+          if (transcript) micFinalText = micFinalText ? micFinalText + ' ' + transcript : transcript;
+        } else {
+          interim += transcript;
+        }
       }
+      micRestartAttempts = 0;
+      // Speech is still coming in (even just interim words), so the
+      // candidate isn't done yet — push the "you've gone quiet" deadline out.
+      if (micRecordingActive) armMicSilenceTimer();
+      updateMicTextbox(interim);
     });
 
     recognition.addEventListener('end', function () {
       isListening = false;
+      clearMicSilenceTimer();
+
+      if (micRecordingActive) {
+        // Browser ended the engine on its own (network hiccup, internal
+        // engine timeout, etc.) while the user was still recording — resume
+        // without losing anything already dictated. Reusing the same
+        // `recognition` instance (never `new SpeechRecognition()`) avoids
+        // leaking engines or piling up duplicate listeners across restarts.
+        // currentState stays 'listening' through the gap, so the mic
+        // indicator and disabled input/send state don't flicker.
+        micRestartAttempts += 1;
+        if (micRestartAttempts > 6) {
+          micRecordingActive = false;
+          showBanner('Voice input keeps losing connection. Check your network, or keep typing — what you said so far is still in the box.', true);
+          if (currentState === 'listening') setState('idle');
+          return;
+        }
+        setTimeout(function () {
+          if (micRecordingActive) {
+            try {
+              recognition.start();
+              armMicSilenceTimer();
+            } catch (e) { /* engine still settling; next end/result cycle will retry */ }
+          }
+        }, 250);
+        return;
+      }
+
       if (currentState === 'listening') {
         setState('idle');
       }
@@ -415,19 +909,69 @@
 
     recognition.addEventListener('error', function (event) {
       console.error('Speech recognition error', event.error);
+      // Transient conditions — a pause, a stray abort, or a network blip —
+      // are recoverable. Let the 'end' handler decide whether to auto-restart
+      // instead of tearing down recording mode here.
+      var transient = event.error === 'no-speech' || event.error === 'aborted' || event.error === 'network';
+      if (transient) return;
+
+      clearMicSilenceTimer();
+      micRecordingActive = false;
       isListening = false;
-      renderError('Speech recognition failed. Please type your answer instead.');
+      var message = micErrorMessage(event.error);
+      if (message) showBanner(message, true);
       setState('idle');
     });
   }
 
+  function toggleChat(show) {
+    var visible = show !== undefined ? show : callChat.hidden;
+    callChat.hidden = !visible;
+    chatToggleBtn.classList.toggle('is-active', visible);
+    chatToggleBtn.setAttribute('aria-pressed', visible ? 'true' : 'false');
+  }
+
+  function toggleSelfView() {
+    if (selfViewStream) {
+      selfViewStream.getTracks().forEach(function (track) { track.stop(); });
+      selfViewStream = null;
+      selfViewVideo.srcObject = null;
+      selfView.hidden = true;
+      callStage.classList.remove('has-selfview');
+      camBtn.classList.remove('is-active');
+      camBtn.setAttribute('aria-pressed', 'false');
+      return;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showBanner('This browser can’t access the camera from this page.', true);
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function (stream) {
+        selfViewStream = stream;
+        selfViewVideo.srcObject = stream;
+        selfView.hidden = false;
+        callStage.classList.add('has-selfview');
+        camBtn.classList.add('is-active');
+        camBtn.setAttribute('aria-pressed', 'true');
+        hideBanner();
+      })
+      .catch(function (err) {
+        showBanner('Couldn’t access your camera: ' + (err && err.message ? err.message : err), true);
+      });
+  }
+
   sendBtn.addEventListener('click', function () {
+    stopMicRecording();
     sendInterviewMessage(textInput.value.trim());
   });
 
   textInput.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
       event.preventDefault();
+      stopMicRecording();
       sendInterviewMessage(textInput.value.trim());
     }
   });
@@ -436,21 +980,52 @@
     toggleListening();
   });
 
+  camBtn.addEventListener('click', toggleSelfView);
+  chatToggleBtn.addEventListener('click', function () { toggleChat(); });
+  chatCloseBtn.addEventListener('click', function () { toggleChat(false); });
+
+  endCallBtn.addEventListener('click', function () {
+    if (!confirm('End this mock interview and leave the page?')) return;
+    micRecordingActive = false;
+    if (recognition && isListening) recognition.stop();
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (selfViewStream) selfViewStream.getTracks().forEach(function (track) { track.stop(); });
+    window.location.href = 'company-quiz.html';
+  });
+
   if (!SpeechRecognition) {
-    micBtn.style.display = 'none';
+    micBtn.disabled = true;
+    micBtn.title = 'Voice input isn’t supported in this browser. Try Chrome or Edge, or just type your answer.';
+    showBanner('Voice input isn’t supported in this browser. Try Chrome or Edge, or type your answers in the chat.', true);
   } else {
     setupRecognition();
   }
 
-  if (!context.company) {
-    interviewHistory.innerHTML = '<div class="interview-startup">No company context found. Please return to the company quiz first.</div>';
-    setState('idle');
-    textInput.disabled = true;
-    sendBtn.disabled = true;
-    return;
-  }
+  setAvatarState('idle');
+  var companiesLoaded = loadCompanies();
 
-  startLocalInterview();
+  // Arriving straight from the nav (no company chosen yet) still works —
+  // buildLocalInterview() falls back to generic questions when company/
+  // expectations are empty, and the "Interviewing for" picker above lets
+  // the candidate choose a real company right here without needing to
+  // go through the quiz flow first.
+  //
+  // If we already know the company but not its expectations (e.g. an
+  // upstream data hiccup left that field blank), wait for the local CSV to
+  // load and backfill it — otherwise the interview starts generic and never
+  // gets a chance to correct itself once the CSV data arrives, since the
+  // dropdown's own pre-selection doesn't retrigger anything.
+  if (context.company && !context.expectations) {
+    companiesLoaded.then(function () {
+      if (!context.expectations) {
+        var match = companiesData.filter(function (c) { return c.name === context.company; })[0];
+        if (match) context.expectations = match.expectations;
+      }
+      startInterview();
+    });
+  } else {
+    startInterview();
+  }
 })();
 </script>
 </body>

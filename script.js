@@ -32,6 +32,41 @@ window.jrAuth = {
   }
 };
 
+/* ---------- AI loading indicator: bouncing dots + cycling status text ----------
+   Replaces the old flat `.skeleton` shimmer boxes wherever a page waits on a
+   slow AI/webhook call (these routinely take 20-90s) - the shimmer's motion
+   was too subtle to read as "still working," especially for anyone with
+   prefers-reduced-motion, which turned it off entirely. This is deliberately
+   larger, clearly-moving motion, plus messages that change over time so a
+   long wait still visibly progresses instead of looking stuck.
+   Usage: var stop = window.jrAiLoading(containerEl, ['Reading…', 'Almost done…']);
+   Call stop() if you need to cancel early (rendering the real result over
+   the container already stops the animation being visible, but the timer
+   itself should still be cleared to avoid a stray interval running on). */
+window.jrAiLoading = function (container, messages) {
+  messages = (messages && messages.length) ? messages : ['Working on it…'];
+  container.innerHTML =
+    '<div class="ai-loading">' +
+      '<div class="ai-loading__dots"><span></span><span></span><span></span></div>' +
+      '<div class="ai-loading__text">' + messages[0] + '</div>' +
+    '</div>';
+
+  var textEl = container.querySelector('.ai-loading__text');
+  var i = 0;
+  var interval = setInterval(function () {
+    if (!textEl || !textEl.isConnected) { clearInterval(interval); return; }
+    i = (i + 1) % messages.length;
+    textEl.style.opacity = 0;
+    setTimeout(function () {
+      if (!textEl.isConnected) return;
+      textEl.textContent = messages[i];
+      textEl.style.opacity = 1;
+    }, 220);
+  }, 2600);
+
+  return function stop() { clearInterval(interval); };
+};
+
 /* ---------- Botpress floating chat widget (loads on every page) ----------
    themeMode/botAvatar are set from the site's current theme at load time.
    Botpress doesn't reliably re-apply config via a second init() call once

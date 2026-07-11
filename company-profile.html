@@ -231,9 +231,11 @@
   titleEl.textContent = company;
 
   function renderLoading() {
-    content.innerHTML =
-      '<div class="skeleton" style="height:20px;width:60%;margin-bottom:10px;"></div>' +
-      '<div class="skeleton" style="height:140px;"></div>';
+    window.jrAiLoading(content, [
+      'Loading company profile…',
+      'Gathering hiring insights…',
+      'Almost ready…'
+    ]);
   }
 
   function renderProfile(data) {

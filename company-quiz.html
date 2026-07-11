@@ -202,13 +202,11 @@
   }
 
   function renderLoading() {
-    content.innerHTML =
-      '<div class="pathway-card pathway-card-full">' +
-        '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path><path d="M12 7v5l3 2"></path></svg><span class="pathway-card__title">Preparing your quiz</span></div>' +
-        '<div class="skeleton" style="height:18px;width:60%;margin-bottom:10px;"></div>' +
-        '<div class="skeleton" style="height:120px;margin-bottom:10px;"></div>' +
-        '<div class="skeleton" style="height:120px;"></div>' +
-      '</div>';
+    window.jrAiLoading(content, [
+      'Preparing your quiz…',
+      'Writing questions based on this company…',
+      'Almost ready…'
+    ]);
   }
 
   function renderError(message, retryLabel) {

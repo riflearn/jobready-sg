@@ -171,6 +171,93 @@
   var resultDiv = document.getElementById('careerPathwayResult');
   var WEBHOOK_URL = 'https://n8ngc.codeblazar.org/webhook/fea47b56-eeea-4198-b3c1-08b106b80ca0';
 
+  function parseCsv(text) {
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+
+    for (var i = 0; i < text.length; i += 1) {
+      var ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') { field += '"'; i += 1; }
+          else { inQuotes = false; }
+        } else {
+          field += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(field);
+        field = '';
+      } else if (ch === '\r') {
+        continue;
+      } else if (ch === '\n') {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += ch;
+      }
+    }
+    if (field !== '' || row.length) {
+      row.push(field);
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  // Career_Database.csv is the local, reliable source behind this same data —
+  // used whenever the n8n workflow is down or comes back with blank/
+  // unresolved fields, so the career pathway flow still works either way.
+  function loadLocalCareerPathway(diploma) {
+    diploma = String(diploma || '').trim();
+    if (!diploma) return Promise.resolve(null);
+
+    return fetch('Career_Database.csv').then(function (res) {
+      if (!res.ok) throw new Error('Local career data unavailable');
+      return res.text();
+    }).then(function (text) {
+      var csv = parseCsv(text);
+      if (!csv.length) return null;
+      var header = csv[0].map(function (cell) { return String(cell || '').trim(); });
+      var rows = csv.slice(1);
+      for (var i = 0; i < rows.length; i += 1) {
+        var item = rows[i];
+        if (!item || item.length === 0) continue;
+        var rowObj = {};
+        header.forEach(function (key, idx) {
+          rowObj[key] = String(item[idx] || '').trim();
+        });
+        if (String(rowObj['Diploma'] || '').trim().toLowerCase() === diploma.toLowerCase()) {
+          return {
+            diploma: rowObj['Diploma'],
+            skillsLearned: rowObj['Skills Learned'] || '',
+            careerRoles: rowObj['Career Roles'] || '',
+            companiesHiring: rowObj['Companies Hiring'] || '',
+            skillsEmployersWant: rowObj['Skills Employers Want'] || '',
+            resources: rowObj['Resources'] || ''
+          };
+        }
+      }
+      return null;
+    }).catch(function () { return null; });
+  }
+
+  function renderCareerError() {
+    resultDiv.innerHTML =
+      '<div class="career-error">Could not load your career pathway right now. Check your connection or try again. ' +
+      '<button class="btn btn-ghost btn-sm" id="retryCareerBtn">Retry</button></div>';
+    document.getElementById('retryCareerBtn').addEventListener('click', function () { btn.click(); });
+  }
+
+  function proceedWithDiplomaData(data) {
+    sessionStorage.setItem('jobready_diploma_data', JSON.stringify(data));
+    window.location.href = 'skills.html';
+  }
+
   btn.addEventListener('click', function () {
     var diploma = document.getElementById('diplomaSelect').value;
     if (!diploma) {
@@ -178,10 +265,12 @@
       return;
     }
 
-    resultDiv.innerHTML =
-      '<p class="form-hint" style="margin-top:0;margin-bottom:.8rem;">Mapping your career pathway…</p>' +
-      '<div class="skeleton" style="height:20px;width:80%;margin-bottom:10px;"></div>' +
-      '<div class="skeleton" style="height:120px;"></div>';
+    window.jrAiLoading(resultDiv, [
+      'Mapping your career pathway…',
+      'Matching skills to your diploma…',
+      'Finding companies that hire for this field…',
+      'Almost there…'
+    ]);
 
     var controller = new AbortController();
     var timeout = setTimeout(function () { controller.abort(); }, 15000);
@@ -197,15 +286,30 @@
         clearTimeout(timeout);
         var cleaned = rawText.replace(/```json|```/g, '').trim();
         var data = JSON.parse(cleaned);
-        sessionStorage.setItem('jobready_diploma_data', JSON.stringify(data));
-        window.location.href = 'skills.html';
+
+        var skillsLearnedItems = String(data.skillsLearned || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+        var companiesHiringItems = String(data.companiesHiring || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+        var skillsEmployersWantItems = String(data.skillsEmployersWant || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+
+        // Same "200 OK but nothing usable" problem as the company profile
+        // page — an n8n node that isn't wired up right returns blank or
+        // unresolved fields without ever throwing. Fall back to the local
+        // CSV instead of sending the candidate on to an empty skills page.
+        if (!skillsLearnedItems.length && !companiesHiringItems.length && !skillsEmployersWantItems.length) {
+          throw new Error('n8n returned no usable diploma data');
+        }
+
+        proceedWithDiplomaData(data);
       })
       .catch(function () {
         clearTimeout(timeout);
-        resultDiv.innerHTML =
-          '<div class="career-error">Could not load your career pathway right now. Check your connection or try again. ' +
-          '<button class="btn btn-ghost btn-sm" id="retryCareerBtn">Retry</button></div>';
-        document.getElementById('retryCareerBtn').addEventListener('click', function () { btn.click(); });
+        loadLocalCareerPathway(diploma).then(function (localData) {
+          if (localData) {
+            proceedWithDiplomaData(localData);
+          } else {
+            renderCareerError();
+          }
+        });
       });
   });
 })();
