@@ -495,6 +495,32 @@
      configured with its worker before this classic script ever runs -
      see the <script type="module"> block in resume-builder.html. */
 
+  /* Joins a PDF page's text items back into lines instead of one flat
+     space-joined blob - pdf.js reports items in reading order with no line
+     breaks of its own, so without this, "SUMMARY\nLooking for a job." comes
+     back as "SUMMARY  Looking for a job." with no way to tell where one
+     line ended and the next began. Watches each item's Y position
+     (transform[5]) and starts a new line when it jumps beyond a small
+     threshold; items on the same line still join with a space exactly as
+     before. */
+  function pdfItemsToText(items) {
+    var lines = [];
+    var current = '';
+    var lastY = null;
+    items.forEach(function (item) {
+      var y = item.transform[5];
+      if (lastY !== null && Math.abs(y - lastY) > 2) {
+        lines.push(current);
+        current = item.str;
+      } else {
+        current += (current && item.str ? ' ' : '') + item.str;
+      }
+      lastY = y;
+    });
+    if (current) lines.push(current);
+    return lines.join('\n');
+  }
+
   function extractTextFromFile(file) {
     var ext = file.name.split('.').pop().toLowerCase();
 
@@ -512,7 +538,7 @@
             return pdf.getPage(pageNum).then(function (page) {
               return page.getTextContent();
             }).then(function (content) {
-              return content.items.map(function (item) { return item.str; }).join(' ');
+              return pdfItemsToText(content.items);
             });
           })(i));
         }
@@ -727,6 +753,9 @@
     var circumference = 2 * Math.PI * 52;
     var dashOffset = circumference * (1 - atsScore / 100);
 
+    var improvedResumeData = normalizeImprovedResume(data.improvedResume);
+    var improvedResumeText = resumeTextFromData(improvedResumeData);
+
     var weakVerbsHtml = weakVerbs.length
       ? '<div class="fb-bubbles">' + weakVerbs.map(function (v) {
           return '<div class="fb-verb-pair">' +
@@ -753,6 +782,7 @@
           (atsFeedback.length ? '<ul class="fb-score-card__list">' + atsFeedback.map(function (f) { return '<li>' + escapeHtml(f) + '</li>'; }).join('') + '</ul>' : '') +
         '</div>' +
       '</div>' +
+      (improvedResumeText ? '<button type="button" class="flow-back fb-edit-again" id="fbEditAgain">' + FB_ICONS.edit + '<span>Edit improved resume &amp; check again</span></button>' : '') +
       fbSection('Strengths', FB_ICONS.check, fbBubbleList(strengths, 'good')) +
       fbSection('Weak Action Verbs', FB_ICONS.edit, weakVerbsHtml) +
       fbSection('Grammar Issues', FB_ICONS.alert, fbBubbleList(grammarIssues, 'warn')) +
@@ -776,8 +806,18 @@
         '<p class="form-hint" id="rbCopyImprovedHint" style="margin-top:.6rem;">Copy this to re-check your score, or paste it into a job application.</p>' +
       '</div>';
 
-    var improvedResumeData = normalizeImprovedResume(data.improvedResume);
     renderPreviewFromData(improvedResumeData, document.getElementById('rbImprovedPreview'));
+
+    var editAgainBtn = document.getElementById('fbEditAgain');
+    if (editAgainBtn) {
+      editAgainBtn.addEventListener('click', function () {
+        var ta = document.getElementById('rbPasteResume');
+        ta.value = improvedResumeText;
+        ta.dispatchEvent(new Event('input')); // reuses the existing auto-expand + lastUploadedPdf-invalidation listeners
+        ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        ta.focus();
+      });
+    }
 
     // If the submitted text came straight from an uploaded PDF (untouched
     // since extraction), show the actual PDF pages instead of flat text -
@@ -801,7 +841,7 @@
     document.getElementById('rbCopyImproved').addEventListener('click', function () {
       var hint = document.getElementById('rbCopyImprovedHint');
       var original = hint.textContent;
-      navigator.clipboard.writeText(resumeTextFromData(improvedResumeData)).then(function () {
+      navigator.clipboard.writeText(improvedResumeText).then(function () {
         hint.textContent = 'Copied to clipboard.';
         setTimeout(function () { hint.textContent = original; }, 3500);
       });
