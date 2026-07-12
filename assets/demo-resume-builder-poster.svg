@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Resume builder demo poster</title>
+  <desc id="desc">A stylised resume builder screen with feedback notes.</desc>
+  <rect width="1280" height="720" fill="#EDF2ED"/>
+  <rect x="92" y="58" width="1096" height="604" rx="24" fill="#FFFFFF" stroke="#D3DCD5" stroke-width="3"/>
+  <rect x="146" y="112" width="438" height="492" rx="16" fill="#F7F9F7" stroke="#D3DCD5" stroke-width="2"/>
+  <text x="180" y="166" fill="#1C2B45" font-family="IBM Plex Mono, monospace" font-size="30" font-weight="700">Resume Draft</text>
+  <rect x="180" y="210" width="320" height="18" rx="9" fill="#8A9490"/>
+  <rect x="180" y="260" width="354" height="14" rx="7" fill="#D3DCD5"/>
+  <rect x="180" y="292" width="284" height="14" rx="7" fill="#D3DCD5"/>
+  <rect x="180" y="360" width="344" height="14" rx="7" fill="#D3DCD5"/>
+  <rect x="180" y="392" width="260" height="14" rx="7" fill="#D3DCD5"/>
+  <rect x="656" y="142" width="390" height="96" rx="18" fill="#FFF7D8" stroke="#F2C94C" stroke-width="3"/>
+  <text x="692" y="196" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="26">Add measurable outcomes.</text>
+  <rect x="656" y="278" width="474" height="96" rx="18" fill="#E3F0EA" stroke="#1F7A53" stroke-width="3"/>
+  <text x="692" y="332" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="26">Use stronger action verbs.</text>
+  <rect x="656" y="414" width="432" height="96" rx="18" fill="#FBEAE8" stroke="#A93226" stroke-width="3"/>
+  <text x="692" y="468" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="26">Tailor skills to the role.</text>
+  <circle cx="640" cy="360" r="58" fill="#1F7A53"/>
+  <polygon points="622,326 622,394 680,360" fill="#FFFFFF"/>
+</svg>

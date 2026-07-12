@@ -263,6 +263,10 @@ nav.site-nav{
 .section-tight{padding-top:0;}
 .section-alt{background:var(--bg-alt);}
 .block-title{font-family:var(--font-display);font-size:1.4rem;font-weight:700;margin-bottom:1.6rem;letter-spacing:-.01em;}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:1.4rem;margin-bottom:1.6rem;}
+.section-head .block-title{margin-bottom:0;}
+.section-copy{max-width:420px;color:var(--muted);font-size:.92rem;}
+@media(max-width:760px){.section-head{display:block;}.section-head .block-title{margin-bottom:.6rem;}}
 
 /* ---------- AGENT CARDS ---------- */
 .agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.7rem;}
@@ -309,17 +313,25 @@ nav.site-nav{
 @media(max-width:900px){.jstep:not(:last-child)::after{display:none;}}
 
 /* ---------- DEMO PAGE: video ---------- */
+.demo-video-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;}
+@media(max-width:920px){.demo-video-grid{grid-template-columns:1fr;}}
 .video-shell{
   max-width:760px;margin:0 auto;border-radius:20px;border:1px solid var(--border);
   background:var(--card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
   box-shadow:var(--shadow);overflow:hidden;transition:border-color .3s ease;
 }
+.demo-video-card{max-width:none;width:100%;border-radius:14px;}
 .video-shell:hover{border-color:var(--muted-2);}
 .video-frame{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;background:radial-gradient(circle at 50% 40%, var(--blue-soft), transparent 60%), var(--bg-alt);}
+.demo-video-frame{background:var(--ink);}
+.demo-video{display:block;width:100%;height:100%;object-fit:cover;background:var(--ink);}
 .play-btn{width:70px;height:70px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 30px var(--blue-soft);transition:transform .25s ease,box-shadow .25s ease;border:none;}
 .play-btn:hover{transform:scale(1.1);box-shadow:0 10px 40px var(--purple-soft);}
 .play-btn:active{transform:scale(1.02);}
 .video-caption{padding:1.1rem 1.4rem;font-size:.85rem;color:var(--muted);text-align:center;border-top:1px solid var(--border);}
+.demo-video-card .video-caption{text-align:left;display:flex;flex-direction:column;gap:.25rem;min-height:112px;}
+.demo-video-card .video-caption strong{font-family:var(--font-display);font-size:.88rem;color:var(--text);}
+.demo-video-card .video-caption span{line-height:1.45;}
 
 /* ---------- DEMO PAGE: example conversation ---------- */
 .convo-shell{

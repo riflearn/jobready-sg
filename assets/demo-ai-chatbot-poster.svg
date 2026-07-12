@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">AI chatbot demo poster</title>
+  <desc id="desc">A stylised JobReady SG AI chatbot conversation screen.</desc>
+  <rect width="1280" height="720" fill="#EDF2ED"/>
+  <rect x="88" y="70" width="1104" height="580" rx="26" fill="#FFFFFF" stroke="#D3DCD5" stroke-width="3"/>
+  <rect x="88" y="70" width="1104" height="84" rx="26" fill="#1C2B45"/>
+  <text x="136" y="124" fill="#FFFFFF" font-family="IBM Plex Mono, monospace" font-size="32" font-weight="700">AI Chatbot Demo</text>
+  <circle cx="1112" cy="112" r="18" fill="#3DDC97"/>
+  <rect x="144" y="220" width="478" height="76" rx="20" fill="#EDF2ED" stroke="#D3DCD5" stroke-width="2"/>
+  <text x="174" y="268" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="26">How do I prepare for this role?</text>
+  <rect x="474" y="344" width="662" height="82" rx="20" fill="#E3F0EA" stroke="#D3DCD5" stroke-width="2"/>
+  <text x="510" y="394" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="25">I can help with resume, skills, and interview prep.</text>
+  <rect x="474" y="466" width="532" height="82" rx="20" fill="#E3F0EA" stroke="#D3DCD5" stroke-width="2"/>
+  <text x="510" y="516" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="25">Let's start with your target job.</text>
+  <circle cx="640" cy="360" r="58" fill="#1F7A53"/>
+  <polygon points="622,326 622,394 680,360" fill="#FFFFFF"/>
+</svg>

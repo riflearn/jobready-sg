@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Career path demo poster</title>
+  <desc id="desc">A stylised JobReady SG career path screen.</desc>
+  <rect width="1280" height="720" fill="#EDF2ED"/>
+  <rect x="92" y="64" width="1096" height="592" rx="28" fill="#FFFFFF" stroke="#D3DCD5" stroke-width="3"/>
+  <text x="150" y="138" fill="#1C2B45" font-family="IBM Plex Mono, monospace" font-size="34" font-weight="700">Career Path Demo</text>
+  <rect x="150" y="190" width="280" height="86" rx="18" fill="#F7F9F7" stroke="#D3DCD5" stroke-width="3"/>
+  <text x="188" y="244" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="25">Student goal</text>
+  <rect x="500" y="190" width="280" height="86" rx="18" fill="#E3F0EA" stroke="#1F7A53" stroke-width="3"/>
+  <text x="552" y="244" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="25">Skill match</text>
+  <rect x="850" y="190" width="280" height="86" rx="18" fill="#FFF7D8" stroke="#F2C94C" stroke-width="3"/>
+  <text x="890" y="244" fill="#1C2B45" font-family="IBM Plex Sans, Arial, sans-serif" font-size="25">Next steps</text>
+  <path d="M430 233h70M780 233h70" fill="none" stroke="#1F7A53" stroke-width="8" stroke-linecap="round"/>
+  <rect x="196" y="360" width="888" height="38" rx="19" fill="#D3DCD5"/>
+  <rect x="196" y="442" width="690" height="30" rx="15" fill="#D3DCD5"/>
+  <rect x="196" y="512" width="776" height="30" rx="15" fill="#D3DCD5"/>
+  <circle cx="640" cy="360" r="58" fill="#1F7A53"/>
+  <polygon points="622,326 622,394 680,360" fill="#FFFFFF"/>
+</svg>
