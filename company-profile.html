@@ -165,7 +165,8 @@
   function fillFromLocalCsv(data, name) {
     data = data || {};
     var needsFallback = !cleanField(data.overview) || !cleanField(data.website) ||
-      !cleanField(data.expectations) || !cleanField(data.industry);
+      !cleanField(data.expectations) || !cleanField(data.industry) ||
+      !cleanField(data.careersLink) || !cleanField(data.resource);
     if (!needsFallback) return Promise.resolve(data);
 
     return loadLocalCompanyRow(name).then(function (row) {
@@ -175,7 +176,9 @@
         industry: cleanField(data.industry) || row['Industry / Specialization'] || '',
         overview: cleanField(data.overview) || row['Overview'] || '',
         website: cleanField(data.website) || row['Website'] || '',
-        expectations: cleanField(data.expectations) || row['Expectations'] || ''
+        careersLink: cleanField(data.careersLink) || row['Careers Link'] || '',
+        expectations: cleanField(data.expectations) || row['Expectations'] || '',
+        resource: cleanField(data.resource) || row['Resource'] || ''
       };
     });
   }
@@ -209,7 +212,9 @@
     var industry = cleanField(data.industry);
     var overview = cleanField(data.overview);
     var website = cleanField(data.website);
+    var careersLink = cleanField(data.careersLink);
     var expectations = cleanField(data.expectations);
+    var resource = cleanField(data.resource);
 
     titleEl.textContent = name;
     industryEl.textContent = industry || 'Company Profile';
@@ -219,13 +224,30 @@
       : '<p class="profile-body profile-body--empty">Not available yet.</p>';
 
     var siteUrl = websiteUrl(website);
-    var websiteHtml = siteUrl
-      ? '<a class="profile-website-link" href="' + escapeHtml(siteUrl) + '" target="_blank" rel="noopener">' +
-          escapeHtml(website) + ' &rarr;</a>'
+    var careersUrl = websiteUrl(careersLink);
+    var websiteLinks = [];
+    if (siteUrl) {
+      websiteLinks.push('<a class="profile-website-link" href="' + escapeHtml(siteUrl) + '" target="_blank" rel="noopener">' + escapeHtml(website) + ' &rarr;</a>');
+    }
+    if (careersUrl) {
+      websiteLinks.push('<a class="profile-website-link" href="' + escapeHtml(careersUrl) + '" target="_blank" rel="noopener">Apply / Careers Page &rarr;</a>');
+    }
+    var websiteHtml = websiteLinks.length
+      ? '<div style="display:flex;flex-direction:column;gap:.6rem;">' + websiteLinks.join('') + '</div>'
       : '<p class="profile-body profile-body--empty">Not available yet.</p>';
 
     var expectationsHtml = expectations
       ? '<p class="profile-body">' + escapeHtml(expectations) + '</p>'
+      : '<p class="profile-body profile-body--empty">Not available yet.</p>';
+
+    // No dedicated "Resource Link" column exists in Companies.csv - the
+    // resource text links out to whatever's most relevant to actually act
+    // on it, falling back from the careers page to the company site.
+    var resourceLinkTarget = careersUrl || siteUrl;
+    var resourceHtml = resource
+      ? (resourceLinkTarget
+          ? '<a class="profile-website-link" href="' + escapeHtml(resourceLinkTarget) + '" target="_blank" rel="noopener">' + escapeHtml(resource) + ' &rarr;</a>'
+          : '<p class="profile-body">' + escapeHtml(resource) + '</p>')
       : '<p class="profile-body profile-body--empty">Not available yet.</p>';
 
     content.innerHTML =
@@ -238,8 +260,12 @@
         websiteHtml +
       '</div>' +
       '<div class="pathway-card pathway-card-full">' +
-        '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span class="pathway-card__title">What They Look For</span></div>' +
+        '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span class="pathway-card__title">What ' + escapeHtml(name) + ' Wants</span></div>' +
         expectationsHtml +
+      '</div>' +
+      '<div class="pathway-card pathway-card-full">' +
+        '<div class="pathway-card__head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><span class="pathway-card__title">Recommended Resource</span></div>' +
+        resourceHtml +
       '</div>' +
       '<div style="text-align:center;margin-top:2rem;">' +
         '<button class="btn btn-primary" id="startQuizBtn">Start Company Quiz &rarr;</button>' +
