@@ -48,13 +48,15 @@ window.jrAiLoading = function (container, messages) {
   container.innerHTML =
     '<div class="ai-loading">' +
       '<div class="ai-loading__dots"><span></span><span></span><span></span></div>' +
+      '<div class="ai-loading__bar"><div class="ai-loading__bar-fill"></div></div>' +
       '<div class="ai-loading__text">' + messages[0] + '</div>' +
     '</div>';
 
   var textEl = container.querySelector('.ai-loading__text');
+  var fillEl = container.querySelector('.ai-loading__bar-fill');
   var i = 0;
-  var interval = setInterval(function () {
-    if (!textEl || !textEl.isConnected) { clearInterval(interval); return; }
+  var textInterval = setInterval(function () {
+    if (!textEl || !textEl.isConnected) { clearInterval(textInterval); return; }
     i = (i + 1) % messages.length;
     textEl.style.opacity = 0;
     setTimeout(function () {
@@ -64,7 +66,25 @@ window.jrAiLoading = function (container, messages) {
     }, 220);
   }, 2600);
 
-  return function stop() { clearInterval(interval); };
+  /* There's no real progress signal for a single LLM call, so this is a fake
+     asymptotic fill: fast at first, slowing down, capped at 92% so it never
+     visually finishes before the real result actually arrives. Tuned (TAU)
+     against the observed 15-60s range these calls actually take. */
+  var startTime = Date.now();
+  var CAP = 92;
+  var TAU = 14000;
+  var progressInterval = setInterval(function () {
+    if (!fillEl || !fillEl.isConnected) { clearInterval(progressInterval); return; }
+    var elapsed = Date.now() - startTime;
+    var pct = CAP * (1 - Math.exp(-elapsed / TAU));
+    fillEl.style.width = pct.toFixed(1) + '%';
+  }, 200);
+
+  return function stop() {
+    clearInterval(textInterval);
+    clearInterval(progressInterval);
+    if (fillEl && fillEl.isConnected) { fillEl.style.width = '100%'; }
+  };
 };
 
 /* ---------- Botpress floating chat widget (loads on every page) ----------
