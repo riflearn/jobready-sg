@@ -147,7 +147,64 @@ window.jrChatTheme = {
   document.head.appendChild(s);
 })();
 
+/* ---------- shared site nav: single source of truth ----------
+   Was previously copy-pasted <nav class="site-nav"> + <div class="mobile-panel">
+   markup in every page - one page lost the "Live Interview" link during a
+   merge because there was nothing keeping the copies in sync. Every page now
+   just has an empty <div id="nav-placeholder"></div> where that markup used
+   to be; this builds both blocks from one array and swaps them in, before
+   any of the existing nav-wiring code below (active-link highlight, mobile
+   toggle, auth state, data-open-chat buttons) runs - that code is otherwise
+   unchanged, it just now runs against injected markup instead of static HTML. */
+var NAV_LINKS = [
+  { href: 'index.html', page: 'home', label: 'Home' },
+  { href: 'agents.html', page: 'agents', label: 'AI Team' },
+  { href: 'learning-hub.html', page: 'hub', label: 'Learning Hub' },
+  { href: 'interview.html', page: 'interview', label: 'Live Interview' },
+  { href: 'resume-builder.html', page: 'resume', label: 'Resume Builder' },
+  { href: 'demo.html', page: 'demo', label: 'Demo' },
+  { href: 'faq.html', page: 'faq', label: 'FAQ' },
+  { href: 'about.html', page: 'about', label: 'About' }
+];
+
+function injectNav() {
+  var placeholder = document.getElementById('nav-placeholder');
+  if (!placeholder) return;
+
+  var navLinksHtml = NAV_LINKS.map(function (l) {
+    return '<li><a href="' + l.href + '" data-page="' + l.page + '">' + l.label + '</a></li>';
+  }).join('') + '<li><a href="#" data-open-chat>Start Chat</a></li>';
+
+  var mobileLinksHtml = NAV_LINKS.map(function (l) {
+    return '<a href="' + l.href + '" data-page="' + l.page + '">' + l.label + '</a>';
+  }).join('') + '<a href="#" data-open-chat>Start Chat</a>';
+
+  placeholder.outerHTML =
+    '<nav class="site-nav">' +
+      '<a href="index.html" class="nav-logo">' +
+        '<img src="assets/jobready_light.png" alt="JobReady SG" class="logo-img logo-light">' +
+        '<img src="assets/jobready_dark.png" alt="JobReady SG" class="logo-img logo-dark">' +
+      '</a>' +
+      '<ul class="nav-links">' + navLinksHtml + '</ul>' +
+      '<div class="nav-right">' +
+        '<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">' +
+          '<svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>' +
+          '<svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>' +
+        '</button>' +
+        '<span id="authArea" class="auth-area"></span>' +
+        '<button class="nav-toggle" id="navToggle" aria-label="Toggle menu">' +
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>' +
+        '</button>' +
+      '</div>' +
+    '</nav>' +
+    '<div class="mobile-panel" id="mobilePanel">' + mobileLinksHtml +
+      '<div id="authAreaMobile" class="auth-area-mobile"></div>' +
+    '</div>';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+
+  injectNav();
 
   /* ---------- auth state in nav (desktop + mobile) ---------- */
   (function () {
