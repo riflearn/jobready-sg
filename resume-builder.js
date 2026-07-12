@@ -554,6 +554,16 @@
   var uploadHint = document.getElementById('rbUploadHint');
   var uploadHintDefault = uploadHint ? uploadHint.textContent : '';
 
+  /* Tracks the most recently uploaded PDF so the "Original" comparison
+     panel can render the actual page (fonts, layout, images) instead of
+     flat extracted text - only meaningful for PDFs (pdf.js can draw them
+     to a canvas; DOCX/TXT/pasted text have no visual design to recover).
+     Invalidated below the moment the textarea no longer matches exactly
+     what was extracted, since at that point the "original" is a manual
+     edit, not the uploaded file, and rendering the old PDF would be lying
+     about what was actually submitted. */
+  var lastUploadedPdf = null; // { file, extractedText }
+
   if (uploadInput) {
     uploadInput.addEventListener('change', function () {
       var file = uploadInput.files[0];
@@ -561,6 +571,7 @@
       var labelText = document.getElementById('rbFileUploadLabelText');
       if (labelText) labelText.textContent = file.name;
       uploadHint.textContent = 'Reading ' + file.name + '…';
+      lastUploadedPdf = null;
       extractTextFromFile(file)
         .then(function (text) {
           text = (text || '').trim();
@@ -571,10 +582,48 @@
           document.getElementById('rbPasteResume').value = text;
           autoExpandTextarea(pasteResumeEl);
           uploadHint.textContent = 'Extracted text from ' + file.name + '.';
+          if (file.name.split('.').pop().toLowerCase() === 'pdf') {
+            lastUploadedPdf = { file: file, extractedText: text };
+          }
         })
         .catch(function () {
           uploadHint.textContent = 'Could not read that file (' + file.name + '). Try pasting your resume text instead.';
         });
+    });
+  }
+
+  if (pasteResumeEl) {
+    pasteResumeEl.addEventListener('input', function () {
+      if (lastUploadedPdf && pasteResumeEl.value.trim() !== lastUploadedPdf.extractedText) {
+        lastUploadedPdf = null;
+      }
+    });
+  }
+
+  /* Renders every page of a PDF File into `container` as stacked canvases -
+     pixel-accurate to the original (fonts, layout, images), unlike the
+     plain-text extraction used for the actual AI submission. */
+  function renderPdfIntoContainer(file, container) {
+    return file.arrayBuffer().then(function (buf) {
+      return pdfjsLib.getDocument({ data: buf }).promise;
+    }).then(function (pdf) {
+      container.innerHTML = '';
+      var renderNext = function (pageNum) {
+        if (pageNum > pdf.numPages) return Promise.resolve();
+        return pdf.getPage(pageNum).then(function (page) {
+          var viewport = page.getViewport({ scale: 1.4 });
+          var canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          canvas.style.width = '100%';
+          canvas.style.height = 'auto';
+          canvas.style.display = 'block';
+          if (pageNum < pdf.numPages) canvas.style.marginBottom = '12px';
+          container.appendChild(canvas);
+          return page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
+        }).then(function () { return renderNext(pageNum + 1); });
+      };
+      return renderNext(1);
     });
   }
 
@@ -713,7 +762,7 @@
         '<div class="fb-compare">' +
           '<div>' +
             '<div class="fb-compare__label">Original</div>' +
-            '<div class="resume-preview fb-compare__original">' + escapeHtml(originalText || '') + '</div>' +
+            '<div class="resume-preview fb-compare__original" id="fbOriginalPreview">' + escapeHtml(originalText || '') + '</div>' +
           '</div>' +
           '<div>' +
             '<div class="fb-compare__label">Improved</div>' +
@@ -729,6 +778,21 @@
 
     var improvedResumeData = normalizeImprovedResume(data.improvedResume);
     renderPreviewFromData(improvedResumeData, document.getElementById('rbImprovedPreview'));
+
+    // If the submitted text came straight from an uploaded PDF (untouched
+    // since extraction), show the actual PDF pages instead of flat text -
+    // preserves the original's real fonts/layout/images. Anything else
+    // (pasted text, DOCX/TXT, or a PDF the user then hand-edited) has no
+    // recoverable "design" to show, so the plain-text panel already
+    // rendered above stays as the fallback.
+    if (lastUploadedPdf && lastUploadedPdf.extractedText === (originalText || '').trim()) {
+      var originalPreviewEl = document.getElementById('fbOriginalPreview');
+      renderPdfIntoContainer(lastUploadedPdf.file, originalPreviewEl).catch(function () {
+        // Rendering failed for some reason (corrupt buffer, etc.) - leave
+        // the plain-text version already in the DOM rather than showing
+        // a blank box.
+      });
+    }
 
     document.getElementById('rbPrintImproved').addEventListener('click', function () {
       buildResumePdf(improvedResumeData, improvedResumeData.name || 'resume');
