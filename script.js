@@ -262,9 +262,80 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ---------- nav: solid background + shadow once the page scrolls ---------- */
+  (function () {
+    const nav = document.querySelector('nav.site-nav');
+    if (!nav) return;
+    const update = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  })();
+
+  /* ---------- hero: rotating outcome word ----------
+     Purely cosmetic; only present on pages with #heroWord (home). */
+  (function () {
+    const el = document.getElementById('heroWord');
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const words = ['confidence', 'clarity', 'a real plan', 'zero guesswork'];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % words.length;
+      el.classList.remove('word-swap');
+      void el.offsetWidth; // restart the CSS animation
+      el.textContent = words[i];
+      el.classList.add('word-swap');
+    }, 2600);
+  })();
+
+  /* ---------- hero: count-up stat numbers ---------- */
+  (function () {
+    const targets = document.querySelectorAll('[data-count]');
+    if (!targets.length) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    targets.forEach((el) => {
+      const end = parseInt(el.dataset.count, 10);
+      if (Number.isNaN(end)) return;
+      if (reduceMotion) { el.textContent = end; return; }
+      const duration = 900;
+      const start = performance.now();
+      (function tick(now) {
+        const p = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * end);
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+    });
+  })();
+
+  /* ---------- hero background: cursor-tracked spotlight ---------- */
+  (function () {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('.hero').forEach((hero) => {
+      hero.addEventListener('pointermove', (e) => {
+        const r = hero.getBoundingClientRect();
+        hero.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        hero.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+      });
+    });
+  })();
+
+  /* ---------- card hover glow: follow the cursor via CSS vars ---------- */
+  (function () {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    document.querySelectorAll('.agent-card, .coach-card, .path-card').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--gx', ((e.clientX - r.left) / r.width * 100) + '%');
+        card.style.setProperty('--gy', ((e.clientY - r.top) / r.height * 100) + '%');
+      });
+    });
+  })();
+
   /* ---------- scroll-triggered fade-in for cards and blocks ---------- */
   const revealSelectors = [
-    '.agent-card', '.jstep', '.team-card', '.tech-badge', '.faq-item',
+    '.agent-card', '.jstep', '.team-card', '.tech-badge', '.faq-item', '.step', '.coach-card',
     '.video-shell', '.arch-shell', '.chat-frame', '.convo-shell', '.block-title'
   ].join(',');
   const revealEls = document.querySelectorAll(revealSelectors);
